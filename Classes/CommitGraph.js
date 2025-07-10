@@ -50,8 +50,8 @@ export default class CommitGraph{
         }
         return true
     }
-    // always move the branch with the head
-    moveHeadWithBranch(hash){
+    // will update the head if the head points to a branch
+    moveBranch(hash){
         var commit = Object.keys(this.getGraph()).find(id => id == hash)
         if(commit != null){
             var branch = this.branches.find(branch => this.head.currentPosition == branch.name)
