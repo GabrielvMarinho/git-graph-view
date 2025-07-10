@@ -1,9 +1,4 @@
-import { createCommit } from "./functions.js"
-import graphOfCommits from "./graphOfCommits.js"
+import CommitGraph from "./Classes/CommitGraph.js"
 
-
-
-
-console.log(graphOfCommits)
-createCommit(graphOfCommits)
-console.log(graphOfCommits)
+var commitGraph = new CommitGraph()
+console.log(commitGraph.getCurrentState())
