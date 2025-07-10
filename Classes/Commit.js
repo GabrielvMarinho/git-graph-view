@@ -1,5 +1,6 @@
 export default class Commit{
-    constructor(){
+    constructor(name){
+        this.name = name
         this.next = []
     }
     appendCommit(next){

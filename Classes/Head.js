@@ -1,8 +1,8 @@
 export default class Head{
-    constructor(currenHash){
-        this.currenHash = currenHash
+    constructor(currentPosition){
+        this.currentPosition = currentPosition
     }
-    setPosition(currenHash){
-        this.currenHash = currenHash
+    setPosition(currentPosition){
+        this.currentPosition = currentPosition
     }
 }

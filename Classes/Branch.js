@@ -3,7 +3,9 @@ export default class Branch{
         this.name = name
         this.currenHash = currenHash
     }
-    
+    getName(){
+        return this.name
+    }
     setPosition(currenHash){
         this.currenHash = currenHash
     }
