@@ -2,7 +2,7 @@ import Commit from "./Commit.js";
 import crypto from "crypto"
 import Head from "./Head.js";
 import Branch from "./Branch.js";
-export default class CommitGraph{
+export default class ObjectModel{
     
     constructor(){
         var first_sha = this.getRandomSha()
@@ -11,7 +11,7 @@ export default class CommitGraph{
         //default and only branch being master
         var master = new Branch("master", first_sha)
         this.head = new Head(master.getName())
-
+        
         this.branches = [master]
     }
 
@@ -83,25 +83,23 @@ export default class CommitGraph{
         var newBranch = new Branch(name, this.getHeadCurrentHash())
         this.branches.push(newBranch)
     } 
+    
     createCommit(name){
         
-        var after_id = this.getHeadCurrentHash()
+        const parent_id = this.getHeadCurrentHash()
 
-        const next_commit = this.getRandomSha()
-        this.graph[next_commit] = new Commit(name)
+        const new_commit_sha = this.getRandomSha()
+        this.graph[new_commit_sha] = new Commit(name, parent_id)
         
-        this.appendCommit(after_id, next_commit)
 
         if(this.isHeadDetached()){
-            this.moveHead(next_commit)
+            this.moveHead(new_commit_sha)
         }else{
-            this.moveHeadWithBranch(next_commit)
+            this.moveBranch(new_commit_sha)
         }
         
     }
 
-    appendCommit(after_id, commit_id){
-        this.graph[after_id].appendCommit(commit_id)
-    } 
+
 
 }
