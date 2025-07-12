@@ -83,13 +83,12 @@ export default class ObjectModel{
         var newBranch = new Branch(name, this.getHeadCurrentHash())
         this.branches.push(newBranch)
     } 
-    
-    createCommit(name){
+    createCommit(message){
         
         const parent_id = this.getHeadCurrentHash()
 
         const new_commit_sha = this.getRandomSha()
-        this.graph[new_commit_sha] = new Commit(name, parent_id)
+        this.graph[new_commit_sha] = new Commit(message, parent_id)
         
 
         if(this.isHeadDetached()){
@@ -99,6 +98,7 @@ export default class ObjectModel{
         }
         
     }
+
 
 
 
