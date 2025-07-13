@@ -1,12 +1,20 @@
+import CommandManager from "./Classes/CommandManager.js"
 import GitObject from "./Classes/GitObject.js"
 
 
 
-const gitObject = new GitObject()
+const commandManager = new CommandManager()
 
 test("creating commit", () =>{
-    const hash = gitObject.createCommit("Second Commit")
+    const firstHash = Object.keys(commandManager.getGraph())[0]
+    
+    const commit = commandManager.commit("Second commit")
     expect(
-        gitObject.getGraph()[hash]
-    ).toBeDefined()
+        commit.parents
+    ).toContain(firstHash)
+    
+    expect(
+        commit.message
+    ).toBe("Second commit")
 })
+

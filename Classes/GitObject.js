@@ -85,11 +85,10 @@ export default class GitObject{
         const currentHash = this.getHeadCurrentHash()
 
         const newCommitSha = this.getRandomSha()
-        this.graph[newCommitSha] = new Commit(message, currentHash)
-        
-
+        const newCommit = new Commit(message, currentHash)
+        this.graph[newCommitSha] = newCommit
         this.updateCurrentBranchToHash(newCommitSha)
-        return newCommitSha
+        return newCommit
     }
 
 
