@@ -2,7 +2,8 @@ import Commit from "./Commit.js";
 import crypto from "crypto"
 import Head from "./Head.js";
 import Branch from "./Branch.js";
-export default class ObjectModel{
+
+export default class GitObject{
     
     constructor(){
         var firstSha = this.getRandomSha()
@@ -83,7 +84,12 @@ export default class ObjectModel{
         this.moveCurrentPosition(newCommitSha)
 
     }
- 
+    updateCurrentBranchToHash(hash){
+        var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
+        if(branch){
+            branch.currenHash = hash
+        }
+    }
     createCommit(message){
         
         const currentHash = this.getHeadCurrentHash()
@@ -92,7 +98,8 @@ export default class ObjectModel{
         this.graph[newCommitSha] = new Commit(message, currentHash)
         
 
-        this.moveCurrentPosition(newCommitSha)
+        this.updateCurrentBranchToHash(newCommitSha)
+        return newCommitSha
     }
 
 
