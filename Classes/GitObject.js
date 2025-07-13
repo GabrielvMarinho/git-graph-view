@@ -74,16 +74,6 @@ export default class GitObject{
         this.branches.push(newBranch)
     } 
 
-    createMergeCommit(message, branchOrHashToMerge){
-        const currentHash = this.getHeadCurrentHash()
-        const hashToMerge = this.getHashFrom(branchOrHashToMerge)
-        
-        const newCommitSha = this.getRandomSha()
-        this.graph[newCommitSha] = new Commit(message, currentHash, hashToMerge)
-        
-        this.moveCurrentPosition(newCommitSha)
-
-    }
     updateCurrentBranchToHash(hash){
         var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
         if(branch){
