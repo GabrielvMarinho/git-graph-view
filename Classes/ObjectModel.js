@@ -5,11 +5,11 @@ import Branch from "./Branch.js";
 export default class ObjectModel{
     
     constructor(){
-        var first_sha = this.getRandomSha()
+        var firstSha = this.getRandomSha()
         // always start with a commit
-        this.graph = {[first_sha]:new Commit("First commit")}
+        this.graph = {[firstSha]:new Commit("First commit")}
         //default and only branch being master
-        var master = new Branch("master", first_sha)
+        var master = new Branch("master", firstSha)
         this.head = new Head(master.getName())
         
         this.branches = [master]
@@ -39,39 +39,28 @@ export default class ObjectModel{
         else{
             return this.head.currentPosition
         }
-
-
     }
-
-    isHeadDetached(){
-        var branch = this.branches.find(branch => this.head.currentPosition == branch.name)
-        if(branch){
-            return false
-        }
-        return true
-    }
-    // will update the head if the head points to a branch
-    moveBranch(hash){
+    // return the hash from the branch or just the sent value 
+    getHashFrom(branchOrHash){
         var commit = Object.keys(this.getGraph()).find(id => id == hash)
         if(commit != null){
             var branch = this.branches.find(branch => this.head.currentPosition == branch.name)
-            branch.currenHash = commit    
+            return branch.currenHash
         }
         else{
-            throw new Error("No commit equals to")
+            return branchOrHash
         }
     }
-    // can detach the head if points to a specific hash and no branch
-    moveHead(name_or_hash){
-        var branch = this.branches.find(branch => branch.name == name_or_hash)
-        if(branch != null){
+    
+    moveCurrentPosition(branchOrHash){
+        var branch = this.branches.find(branch => branch.name == branchOrHash)
+        if(branch){
             this.head.currentPosition = branch.name
         }
         else{
-            var commit = Object.keys(this.getGraph()).find(id => id == name_or_hash)
-            console.log(commit)
-            if(commit != null){
-                this.head.currentPosition = commit
+            var commitHash = Object.keys(this.getGraph()).find(id => id == branchOrHash)
+            if(commitHash){
+                this.head.currentPosition = commitHash
             }
             else{
                 throw new Error("No branch nor commit equals to")
@@ -83,20 +72,27 @@ export default class ObjectModel{
         var newBranch = new Branch(name, this.getHeadCurrentHash())
         this.branches.push(newBranch)
     } 
+
+    createMergeCommit(message, branchOrHashToMerge){
+        const currentHash = this.getHeadCurrentHash()
+        const hashToMerge = this.getHashFrom(branchOrHashToMerge)
+        
+        const newCommitSha = this.getRandomSha()
+        this.graph[newCommitSha] = new Commit(message, currentHash, hashToMerge)
+        
+        this.moveCurrentPosition(newCommitSha)
+
+    }
+ 
     createCommit(message){
         
-        const parent_id = this.getHeadCurrentHash()
+        const currentHash = this.getHeadCurrentHash()
 
-        const new_commit_sha = this.getRandomSha()
-        this.graph[new_commit_sha] = new Commit(message, parent_id)
+        const newCommitSha = this.getRandomSha()
+        this.graph[newCommitSha] = new Commit(message, currentHash)
         
 
-        if(this.isHeadDetached()){
-            this.moveHead(new_commit_sha)
-        }else{
-            this.moveBranch(new_commit_sha)
-        }
-        
+        this.moveCurrentPosition(newCommitSha)
     }
 
 
