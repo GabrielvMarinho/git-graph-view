@@ -52,8 +52,26 @@ export default class GitObject{
             return branchOrHash
         }
     }
-    
-    moveCurrentPosition(branchOrHash){
+    // changes the current position to either a hash or if its a branch name, changes the branch hash
+    updateCurrentPositionAndMoveBranch(branchOrHash){
+        currentPosition = this.head.currentPosition
+        var branch = this.branches.find(branch => branch.name == currentPosition)
+        if(branch){
+            
+            branch.currenHash = branchOrHash
+        }
+        else{
+            var commitHash = Object.keys(this.getGraph()).find(id => id == branchOrHash)
+            if(commitHash){
+                this.head.currentPosition = commitHash
+            }
+            else{
+                throw new Error("No branch nor commit equals to")
+            }
+        }   
+    }
+    // changes the current position to either a hash or branch name, doesnt change the actual position
+    updateCurrentPosition(branchOrHash){
         var branch = this.branches.find(branch => branch.name == branchOrHash)
         if(branch){
             this.head.currentPosition = branch.name
@@ -68,18 +86,19 @@ export default class GitObject{
             }
         }
     }
+    updatePositionToNewCommit(hash){
+        var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
+        if(branch){
+            branch.currenHash = hash
+        }
+    }
 
     createBranch(name){
         var newBranch = new Branch(name, this.getHeadCurrentHash())
         this.branches.push(newBranch)
     } 
 
-    updateCurrentBranchToHash(hash){
-        var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
-        if(branch){
-            branch.currenHash = hash
-        }
-    }
+    
     createCommit(message){
         
         const currentHash = this.getHeadCurrentHash()
@@ -87,7 +106,17 @@ export default class GitObject{
         const newCommitSha = this.getRandomSha()
         const newCommit = new Commit(message, currentHash)
         this.graph[newCommitSha] = newCommit
-        this.updateCurrentBranchToHash(newCommitSha)
+        this.updateCurrentPositionAndMoveBranch(newCommitSha)
+        return newCommit
+    }
+    createMergeCommit(positionToMerge){
+        
+        const currentHash = this.getHeadCurrentHash()
+
+        const newCommitSha = this.getRandomSha()
+        const newCommit = new Commit(message, currentHash, positionToMerge)
+        this.graph[newCommitSha] = newCommit
+        this.updateCurrentPositionAndMoveBranch(newCommitSha)
         return newCommit
     }
 
