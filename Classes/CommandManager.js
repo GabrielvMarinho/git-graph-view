@@ -4,7 +4,7 @@ export default class CommandManager{
     gitObject = new GitObject()
     
     checkout(branchOrHash){
-        
+        this.gitObject.updateCurrentPosition(branchOrHash)
     }
 
     commit(message){

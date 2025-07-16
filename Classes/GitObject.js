@@ -35,7 +35,7 @@ export default class GitObject{
     getHeadCurrentHash(){
         var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
         if(branch != null){
-            return branch.currenHash
+            return branch.currentHash
         }
         else{
             return this.head.currentPosition
@@ -46,7 +46,7 @@ export default class GitObject{
         var commit = Object.keys(this.getGraph()).find(id => id == hash)
         if(commit != null){
             var branch = this.branches.find(branch => this.head.currentPosition == branch.name)
-            return branch.currenHash
+            return branch.currentHash
         }
         else{
             return branchOrHash
@@ -58,7 +58,7 @@ export default class GitObject{
         var branch = this.branches.find(branch => branch.name == currentPosition)
         if(branch){
             
-            branch.currenHash = branchOrHash
+            branch.currentHash = branchOrHash
         }
         else{
             var commitHash = Object.keys(this.getGraph()).find(id => id == branchOrHash)
@@ -84,12 +84,6 @@ export default class GitObject{
             else{
                 throw new Error("No branch nor commit equals to")
             }
-        }
-    }
-    updatePositionToNewCommit(hash){
-        var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
-        if(branch){
-            branch.currenHash = hash
         }
     }
 

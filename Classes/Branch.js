@@ -1,13 +1,13 @@
 export default class Branch{
-    constructor(name, currenHash){
+    constructor(name, currentHash){
         this.name = name
-        this.currenHash = currenHash
+        this.currentHash = currentHash
     }
     getName(){
         return this.name
     }
-    setPosition(currenHash){
-        this.currenHash = currenHash
+    setPosition(currentHash){
+        this.currentHash = currentHash
     }
 
 }
