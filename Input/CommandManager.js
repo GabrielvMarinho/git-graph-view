@@ -18,12 +18,14 @@ export default class CommandManager{
         this.gitObject.deleteBranch(branch)
         this.checkoutAndCreateBranch(branch)
     }
-    commitWithMessage(command){
-        message = command.extractValueFromFlag(command._arguments, "-m")
-        return this.gitObject.createCommit(message)
-    }
-    commit(){
-        return this.gitObject.createCommit()
+   
+    commit(command){
+        var commit = this.gitObject.createCommit()
+
+        if(command._arguments.includes("-m")){
+            message = command.extractValueFromFlag(command._arguments, "-m")
+            commit.setMessage(message)
+        }
     }
 
 

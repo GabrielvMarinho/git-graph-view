@@ -17,12 +17,15 @@ test("git commit", () =>{
     ).toBeGreaterThan(1)
     
     expect(
-        Object.entries(cmdDisp.commandManager.getCurrentState()["graph"])[1].message
-    ).toBe(undefined)
+        Object.values(cmdDisp.commandManager.getCurrentState()["graph"])[1].message
+    ).toBe(null)
 })
 test("git commit -m 'message'", () =>{
     var cmdDisp = new CommandDispatcher() 
 
-    cmdDisp.receiveAndDispatchCommand("git commit -m 'message'")
-    console.log(cmdDisp.commandManager.getCurrentState())
+    cmdDisp.receiveAndDispatchCommand("git commit -m 'testing'")
+
+    expect(
+        Object.values(cmdDisp.commandManager.getCurrentState()["graph"])[1].message
+    ).toBe("testing")
 })

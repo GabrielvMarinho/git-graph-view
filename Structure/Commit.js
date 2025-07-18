@@ -4,5 +4,8 @@ export default class Commit{
         this.parents = parents
     }
    
+    setMessage(message){
+        this.message = message
+    }
     
 }

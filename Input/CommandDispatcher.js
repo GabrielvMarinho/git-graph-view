@@ -27,20 +27,7 @@ export default class CommandDispatcher{
         }
     }
     commit(command){
-       
-        const flagFunctions ={
-            "-m": () => this.commandManager.commitWithMessage(command)
-        } 
-        if(command._arguments.length == 0){
-            this.commandManager.commit()
-        }else{
-            command._arguments.forEach(flag =>{
-            if(flagFunctions[flag]){
-                flagFunctions[flag]()
-                }
-            })
-        }
-        
+        this.commandManager.commit(command)
     }
 
 
