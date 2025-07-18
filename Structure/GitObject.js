@@ -91,6 +91,10 @@ export default class GitObject{
         var newBranch = new Branch(name, this.getHeadCurrentHash())
         this.branches.push(newBranch)
     } 
+    deleteBranch(name){
+        var branchObj = this.branches.find(branchObj => branchObj.name == name)
+        this.branches.splice(branchObj, 1)
+    }
 
     
     createCommit(message){

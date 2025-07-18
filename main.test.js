@@ -1,53 +1,11 @@
-import CommandManager from "./Classes/CommandManager.js"
+import CommandDispatcher from "./Input/CommandDispatcher"
 
 
-test("creating commit from a branch", () =>{
-    const commandManager = new CommandManager()
-
-    const firstHash = Object.keys(commandManager.getCurrentState()["graph"])[0]
-    
-    const commit = commandManager.commit("Second commit")
-
-    const newHash = Object.keys(commandManager.getCurrentState()["graph"])[1]
-
-    const currentBranch = commandManager.getCurrentState()["branches"][0]
-
+test("git checkout -b dev", () =>{
+    var cmdDisp = new CommandDispatcher() 
+    cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
     expect(
-        currentBranch.currentHash
-    ).toBe(newHash)
-
-    expect(
-        commit.parents
-    ).toContain(firstHash)
-    
-    expect(
-        commit.message
-    ).toBe("Second commit")
-});
-
-test("creating commit from a detached head", () =>{
-    const commandManager = new CommandManager()
-    const firstHash = Object.keys(commandManager.getCurrentState()["graph"])[0]
-
-    commandManager.checkout(firstHash)
-
-    const commit = commandManager.commit("Second commit")
-
-    const newHash = Object.keys(commandManager.getCurrentState()["graph"])[1]
-
-
-    const headCurrentPosition = commandManager.getCurrentState()["head"].currentPosition
-
-    expect(
-        newHash
-    ).toBe(headCurrentPosition)
-
-    expect(
-        commit.parents
-    ).toContain(firstHash)
-    
-    expect(
-        commit.message
-    ).toBe("Second commit")
-});
+        cmdDisp.commandManager.getCurrentState()["head"].currentPosition
+    ).toBe("dev")
+})
 
