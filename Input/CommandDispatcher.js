@@ -12,14 +12,41 @@ export default class CommandDispatcher{
     }
 
     checkout(command){
-        branchOrHash = command._arguments[command._arguments.length-1]
-        if(command._arguments.includes("-b")){
-            this.commandManager.checkoutAndCreateBranch(branchOrHash)
+        const flagFunctions = {
+            "-b": () => this.commandManager.checkoutAndCreateBranch(command),
+            "-B": () => this.commandManager.checkoutAndCreateBranchIfExistsReset(command),
         }
-        else if(command._arguments.includes("-B")){
-            this.commandManager.checkoutAndCreateBranch(branchOrHash)
-        }        
+        if(command._arguments.length == 0){
+            this.commandManager.checkout()
+        }else{
+            command._arguments.forEach(flag =>{
+                if(flagFunctions[flag]){
+                    flagFunctions[flag]()
+                }
+            })
+        }
     }
+    commit(command){
+       
+        const flagFunctions ={
+            "-m": () => this.commandManager.commitWithMessage(command)
+        } 
+        if(command._arguments.length == 0){
+            this.commandManager.commit()
+        }else{
+            command._arguments.forEach(flag =>{
+            if(flagFunctions[flag]){
+                flagFunctions[flag]()
+                }
+            })
+        }
+        
+    }
+
+
+
+
+
 
 
     

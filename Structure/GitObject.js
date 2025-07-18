@@ -97,7 +97,7 @@ export default class GitObject{
     }
 
     
-    createCommit(message){
+    createCommit(message=null){
         
         const currentHash = this.getHeadCurrentHash()
 

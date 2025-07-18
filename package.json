@@ -3,6 +3,8 @@
     "@babel/plugin-transform-modules-commonjs": "^7.27.1",
     "jest": "^30.0.4"
   },
-  "type": "module"
-  
+  "type": "module",
+  "dependencies": {
+    "string-argv": "^0.3.2"
+  }
 }
