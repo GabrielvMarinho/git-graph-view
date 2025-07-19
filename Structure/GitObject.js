@@ -3,6 +3,9 @@ import crypto from "crypto"
 import Head from "./Head.js";
 import Branch from "./Branch.js";
 import BranchAlreadyExistException from "../Errors/BranchAlreadyExistException.js";
+import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash.js";
+import { isValidBranchName } from "../utils.js";
+import NotValidBranchNameException from "../Errors/NotValidBranchNameException"
 
 export default class GitObject{
     
@@ -26,7 +29,14 @@ export default class GitObject{
         
     }
 
-    
+    getCurrentBranchAndHashString(){
+        var position = this.head.currentPosition 
+        var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
+        if(branch.name){
+            return `${position} ${branch.currentHash}`
+        }
+        return `${position}`
+    }
     getGraph(){
         return this.graph
     }
@@ -76,14 +86,17 @@ export default class GitObject{
         var branch = this.branches.find(branch => branch.name == branchOrHash)
         if(branch){
             this.head.currentPosition = branch.name
+            return
+
         }
         else{
             var commitHash = Object.keys(this.getGraph()).find(id => id == branchOrHash)
             if(commitHash){
                 this.head.currentPosition = commitHash
+                return 
             }
             else{
-                throw new Error("No branch nor commit equals to")
+                throw new NoBranchNorCommitHash(branchOrHash)
             }
         }
     }
@@ -91,12 +104,16 @@ export default class GitObject{
         return Object.values(this.branches).some(branchObj => branchObj.name == name)
     }
     createBranch(name){
+        if(!isValidBranchName(name)){
+            throw new NotValidBranchNameException(name);
+        }
         if(this.branchAlreadyExist(name)){
             throw new BranchAlreadyExistException(name)
         }
         var newBranch = new Branch(name, this.getHeadCurrentHash())
         
         this.branches.push(newBranch)
+        
     } 
     deleteBranch(name){
         var branchObj = this.branches.find(branchObj => branchObj.name == name)
@@ -104,7 +121,7 @@ export default class GitObject{
     }
 
     
-    createCommit(message=null){
+    createCommit(message){
         
         const currentHash = this.getHeadCurrentHash()
 
@@ -112,18 +129,9 @@ export default class GitObject{
         const newCommit = new Commit(message, currentHash)
         this.graph[newCommitSha] = newCommit
         this.updateCurrentPositionAndMoveBranch(newCommitSha)
-        return newCommit
+        return newCommitSha
     }
-    createMergeCommit(positionToMerge){
-        
-        const currentHash = this.getHeadCurrentHash()
-
-        const newCommitSha = this.getRandomSha()
-        const newCommit = new Commit(message, currentHash, positionToMerge)
-        this.graph[newCommitSha] = newCommit
-        this.updateCurrentPositionAndMoveBranch(newCommitSha)
-        return newCommit
-    }
+    
 
 
 

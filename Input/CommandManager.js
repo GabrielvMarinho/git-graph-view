@@ -4,28 +4,36 @@ export default class CommandManager{
     gitObject = new GitObject()
     
     checkout(branchOrHash){
-        this.gitObject.updateCurrentPosition(branchOrHash)
+        return this.gitObject.updateCurrentPosition(branchOrHash)
     }
     checkoutAndCreateBranch(command){
-        branch = command._arguments[command._arguments.length-1]
+        branch = command.extractValueFromFlag("-b")
         this.gitObject.createBranch(branch)
         this.gitObject.updateCurrentPosition(branch)
+        return `Switched to a new branch ${branch}`
     }
-    checkoutAndCreateBranchIfExistsReset(branch){
-        branch = command._arguments[command._arguments.length-1]
-        this.gitObject.deleteBranch(branch)
-        this.checkoutAndCreateBranch(branch)
+    checkoutAndCreateBranchIfExistsReset(command){
+        branch = command.extractValueFromFlag("-B")
+        if(this.gitObject.branchAlreadyExist(branch)){
+            return this.checkoutAndCreateBranch(command)
+        }
+        else{
+            this.gitObject.deleteBranch(branch)
+            this.checkoutAndCreateBranch(branch)
+            return `Switched to and reset branch  ${branch}`   
+        }
+        
     }
    
     commit(command){
-        var commit = this.gitObject.createCommit()
-        if(command._arguments.includes("-m")){
-            message = command.extractValueFromFlag(command._arguments, "-m")
-            commit.setMessage(message)
-        }
+        message = command.extractValueFromFlag("-m")
+
+        var sha = this.gitObject.createCommit(message)
+        var positionString = this.gitObject.getCurrentBranchAndHashString()  
+        return `[${positionString}] ${message}`
     }
 
-
+    
     getCurrentState(){
         return this.gitObject.getCurrentState()
     }

@@ -8,7 +8,7 @@ export default class CommandDispatcher{
 
     receiveAndDispatchCommand(commandString){
         var command = new Command(commandString, this.validCommands)
-        this[command.subcommand](command)
+        return this[command.subcommand](command)
     }
 
     checkout(command){
@@ -16,20 +16,29 @@ export default class CommandDispatcher{
             "-b": () => this.commandManager.checkoutAndCreateBranch(command),
             "-B": () => this.commandManager.checkoutAndCreateBranchIfExistsReset(command),
         }
-        if(command._arguments.length == 0){
-            this.commandManager.checkout()
-        }else{
-            command._arguments.forEach(flag =>{
-                if(flagFunctions[flag]){
-                    flagFunctions[flag]()
-                }
-            })
-        }
+        
+        const defualtFunction = () => this.commandManager.checkout(command._arguments[command._arguments.length - 1])
+        return this.executeAllFlags(command, flagFunctions, defualtFunction);
+       
+        
+        
     }
     commit(command){
-        this.commandManager.commit(command)
+        return this.commandManager.commit(command)
     }
 
+
+    executeAllFlags(command, flagFunctions, defualtFunction){
+        for (const flag of command._arguments) {
+            if (flagFunctions[flag]) {
+                return flagFunctions[flag]();  
+            }
+        }
+        return defualtFunction()
+    }
+
+
+    
 
 
 

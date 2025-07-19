@@ -1,35 +1,35 @@
 import CommandDispatcher from "./Input/CommandDispatcher"
 
 
-test("git checkout -b dev", () =>{
+test("git checkout -b", () =>{
     var cmdDisp = new CommandDispatcher() 
-    cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
+    ).toBe("Switched to a new branch dev")
     expect(
         cmdDisp.commandManager.getCurrentState()["head"].currentPosition
     ).toBe("dev")
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git checkout -b main")
     ).toThrow("fatal: a branch named 'main' already exists")
-
-})
-test("git commit", () =>{
-    var cmdDisp = new CommandDispatcher() 
-    cmdDisp.receiveAndDispatchCommand("git commit")
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git checkout -b")
+    ).toThrow("error: switch '-b' requires a value")
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git checkout -b .")
+    ).toThrow("fatal: '.' is not a valid branch name")
 
     expect(
-        Object.entries(cmdDisp.commandManager.getCurrentState()["graph"]).length
-    ).toBeGreaterThan(1)
-    
-    expect(
-        Object.values(cmdDisp.commandManager.getCurrentState()["graph"])[1].message
-    ).toBe(null)
+        () => cmdDisp.receiveAndDispatchCommand("git checkout -b -b")
+    ).toThrow("fatal: '-b' is not a valid branch name")
 })
+
 test("git commit -m 'message'", () =>{
     var cmdDisp = new CommandDispatcher() 
-
-    cmdDisp.receiveAndDispatchCommand("git commit -m 'testing'")
-
+    
     expect(
-        Object.values(cmdDisp.commandManager.getCurrentState()["graph"])[1].message
+        cmdDisp.receiveAndDispatchCommand("git commit -m 'testing'")
     ).toBe("testing")
+
+
 })

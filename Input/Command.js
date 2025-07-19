@@ -1,3 +1,4 @@
+import FlagRequiresValueException from "../Errors/flagRequiresValueException";
 import InvalidCommandException from "../Errors/InvalidCommandException";
 import stringArgv from 'string-argv';
 
@@ -16,10 +17,16 @@ export default class Command{
         }
     }
 
-    extractValueFromFlag(_arguments, flag){
-        const index = _arguments.indexOf(flag);
-        if (index !== -1 && index + 1 < _arguments.length) {
-            return _arguments[index + 1];
+    extractValueFromFlag(flag){
+        const index = this._arguments.indexOf(flag);
+        if (index !== -1) {
+            value = this._arguments[index + 1] 
+
+            if(!value){
+                throw new FlagRequiresValueException(flag)
+            }
+
+            return value
         }
         return null;
     }
