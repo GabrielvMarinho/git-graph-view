@@ -1,4 +1,4 @@
-import InvalidCommand from "../Errors/InvalidCOmmand"
+import InvalidCommandException from "../Errors/InvalidCommandException";
 import stringArgv from 'string-argv';
 
 export default class Command{
@@ -12,7 +12,7 @@ export default class Command{
             this.subcommand = subcommand
             this._arguments = _arguments.slice(2)
         }else{
-            throw new InvalidCommand("Invalid syntax, command not found")
+            throw new InvalidCommandException()
         }
     }
 

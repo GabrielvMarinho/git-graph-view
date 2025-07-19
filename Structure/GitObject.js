@@ -2,6 +2,7 @@ import Commit from "./Commit.js";
 import crypto from "crypto"
 import Head from "./Head.js";
 import Branch from "./Branch.js";
+import BranchAlreadyExistException from "../Errors/BranchAlreadyExistException.js";
 
 export default class GitObject{
     
@@ -9,11 +10,11 @@ export default class GitObject{
         var firstSha = this.getRandomSha()
         // always start with a commit
         this.graph = {[firstSha]:new Commit("First commit")}
-        //default and only branch being master
-        var master = new Branch("master", firstSha)
-        this.head = new Head(master.getName())
+        //default and only branch being main
+        var main = new Branch("main", firstSha)
+        this.head = new Head(main.getName())
         
-        this.branches = [master]
+        this.branches = [main]
     }
 
     getCurrentState(){
@@ -86,9 +87,15 @@ export default class GitObject{
             }
         }
     }
-
+    branchAlreadyExist(name){
+        return Object.values(this.branches).some(branchObj => branchObj.name == name)
+    }
     createBranch(name){
+        if(this.branchAlreadyExist(name)){
+            throw new BranchAlreadyExistException(name)
+        }
         var newBranch = new Branch(name, this.getHeadCurrentHash())
+        
         this.branches.push(newBranch)
     } 
     deleteBranch(name){

@@ -7,6 +7,10 @@ test("git checkout -b dev", () =>{
     expect(
         cmdDisp.commandManager.getCurrentState()["head"].currentPosition
     ).toBe("dev")
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git checkout -b main")
+    ).toThrow("fatal: a branch named 'main' already exists")
+
 })
 test("git commit", () =>{
     var cmdDisp = new CommandDispatcher() 
