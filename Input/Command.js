@@ -27,6 +27,16 @@ export default class Command{
             }
 
             return value
+            
+        }
+        return null;
+    }
+    extractSecondValueFromFlag(flag){
+        const index = this._arguments.indexOf(flag);
+        if (index !== -1) {
+            value = this._arguments[index + 2] 
+
+            return value
         }
         return null;
     }

@@ -6,6 +6,7 @@ import BranchAlreadyExistException from "../Errors/BranchAlreadyExistException.j
 import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash.js";
 import { isValidBranchName } from "../utils.js";
 import NotValidBranchNameException from "../Errors/NotValidBranchNameException"
+import InvalidReferenceForBranchCreationException from "../Errors/InvalidReferenceForBranchCreationException.js";
 
 export default class GitObject{
     
@@ -28,10 +29,10 @@ export default class GitObject{
         }
         
     }
-
+    
     getCurrentBranchAndHashString(){
         var position = this.head.currentPosition 
-        var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
+        var branch = this.getCurrentBranch()
         if(branch.name){
             return `${position} ${branch.currentHash}`
         }
@@ -43,7 +44,10 @@ export default class GitObject{
     getRandomSha(){
         return crypto.randomBytes(20).toString("hex");
     }
-    getHeadCurrentHash(){
+    getCurrentBranch(){
+        return this.branches.find(branch => branch.name == this.head.currentPosition)
+    }
+    getCurrentHash(){
         var branch = this.branches.find(branch => branch.name == this.head.currentPosition)
         if(branch != null){
             return branch.currentHash
@@ -110,20 +114,25 @@ export default class GitObject{
         if(this.branchAlreadyExist(name)){
             throw new BranchAlreadyExistException(name)
         }
-        var newBranch = new Branch(name, this.getHeadCurrentHash())
+        var newBranch = new Branch(name, this.getCurrentHash())
         
         this.branches.push(newBranch)
         
     } 
     deleteBranch(name){
-        var branchObj = this.branches.find(branchObj => branchObj.name == name)
-        this.branches.splice(branchObj, 1)
+
+        var index = this.branches.findIndex(branchObj => branchObj.name == name)
+        if(index !== -1){
+            this.branches.splice(index, 1)
+        }
+        
+        
     }
 
     
     createCommit(message){
         
-        const currentHash = this.getHeadCurrentHash()
+        const currentHash = this.getCurrentHash()
 
         const newCommitSha = this.getRandomSha()
         const newCommit = new Commit(message, currentHash)
