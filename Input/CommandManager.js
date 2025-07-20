@@ -4,8 +4,17 @@ import GitObject from "../Structure/GitObject";
 export default class CommandManager{
     gitObject = new GitObject()
     
-    checkout(branchOrHash){
-        return this.gitObject.updateCurrentPosition(branchOrHash)
+    checkout(command){
+        
+        branchOrHash = command._arguments[command._arguments.length - 1]
+
+        this.gitObject.updateCurrentPosition(branchOrHash)
+        if(this.gitObject.isBranch(branchOrHash)){
+            return `Switched to branch '${branchOrHash}'`
+        }
+        return `Note: switching to ${branchOrHash}.\nYou are in 'detached HEAD' state`
+        
+
     }
     checkoutCreateBranch(command){
         const steps = (branch, positionToGo) =>{
@@ -59,7 +68,6 @@ export default class CommandManager{
    
     commit(command){
         message = command.extractValueFromFlag("-m")
-
         var sha = this.gitObject.createCommit(message)
         var positionString = this.gitObject.getCurrentBranchAndHashString()  
         return `[${positionString}] ${message}`

@@ -1,4 +1,25 @@
 import CommandDispatcher from "./Input/CommandDispatcher"
+test("git checkout 'branchOrHash'", () =>{
+    var cmdDisp = new CommandDispatcher() 
+    hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
+
+    cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git checkout main")
+    ).toBe("Switched to branch 'main'")
+
+    expect(
+        cmdDisp.commandManager.gitObject.getCurrentState().head.currentPosition
+    ).toBe("main")
+
+    expect(
+        cmdDisp.receiveAndDispatchCommand(`git checkout ${hashToCheckout}`)
+    ).toBe(`Note: switching to ${hashToCheckout}.\nYou are in 'detached HEAD' state`)
+
+    expect(
+        cmdDisp.commandManager.gitObject.getCurrentState().head.currentPosition
+    ).toBe(hashToCheckout)
+})
 
 test("git checkout -b 'branch'", () =>{
     var cmdDisp = new CommandDispatcher() 
@@ -22,6 +43,7 @@ test("git checkout -b 'branch'", () =>{
         () => cmdDisp.receiveAndDispatchCommand("git checkout -b -b")
     ).toThrow("fatal: '-b' is not a valid branch name")
 })
+
 test("git checkout -b 'branch' 'positionToGo'", () =>{
     var cmdDisp = new CommandDispatcher() 
     hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
@@ -34,13 +56,9 @@ test("git checkout -b 'branch' 'positionToGo'", () =>{
     expect(
         cmdDisp.commandManager.gitObject.getCurrentState().branches[1].currentHash
     ).toBe(hashToCheckout)
-    console.log(cmdDisp.commandManager.gitObject.getCurrentState())
     expect(
         cmdDisp.receiveAndDispatchCommand(`git checkout -b newestBranch main`)
     ).toBe("Switched to a new branch 'newestBranch'")
-    
-    console.log(cmdDisp.commandManager.gitObject.getCurrentState())
-
     hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
 
     expect(

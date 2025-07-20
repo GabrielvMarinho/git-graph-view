@@ -17,7 +17,7 @@ export default class CommandDispatcher{
             "-B": () => this.commandManager.checkoutResetCreateBranch(command),
         }
         
-        const defualtFunction = () => this.commandManager.checkout(command._arguments[command._arguments.length - 1])
+        const defualtFunction = () => this.commandManager.checkout(command)
         return this.executeAllFlags(command, flagFunctions, defualtFunction);
        
         
@@ -38,13 +38,4 @@ export default class CommandDispatcher{
     }
 
 
-    
-
-
-
-
-
-
-    
-    
 }

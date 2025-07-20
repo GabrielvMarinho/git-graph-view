@@ -41,6 +41,15 @@ export default class GitObject{
     getGraph(){
         return this.graph
     }
+    isBranch(branchOrHash){
+        var branch = this.branches.find(branch => branch.name == branchOrHash)
+        if(branch != null){
+            return true
+        }
+        else{
+            return false
+        }
+    }
     getRandomSha(){
         return crypto.randomBytes(20).toString("hex");
     }
