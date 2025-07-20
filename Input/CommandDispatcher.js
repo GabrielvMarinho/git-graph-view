@@ -13,8 +13,8 @@ export default class CommandDispatcher{
 
     checkout(command){
         const flagFunctions = {
-            "-b": () => this.commandManager.checkoutAndCreateBranch(command),
-            "-B": () => this.commandManager.checkoutAndCreateBranchIfExistsReset(command),
+            "-b": () => this.commandManager.checkoutCreateBranch(command),
+            "-B": () => this.commandManager.checkoutResetCreateBranch(command),
         }
         
         const defualtFunction = () => this.commandManager.checkout(command._arguments[command._arguments.length - 1])

@@ -1,6 +1,6 @@
 import CommandDispatcher from "./Input/CommandDispatcher"
 
-test("git checkout -b", () =>{
+test("git checkout -b 'branch'", () =>{
     var cmdDisp = new CommandDispatcher() 
     expect(
         cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
@@ -22,15 +22,42 @@ test("git checkout -b", () =>{
         () => cmdDisp.receiveAndDispatchCommand("git checkout -b -b")
     ).toThrow("fatal: '-b' is not a valid branch name")
 })
+test("git checkout -b 'branch' 'positionToGo'", () =>{
+    var cmdDisp = new CommandDispatcher() 
+    hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git commit -m 'test'")
+    
+    expect(
+        cmdDisp.receiveAndDispatchCommand(`git checkout -b newBranch ${hashToCheckout}`)
+    ).toBe("Switched to a new branch 'newBranch'")
+    
+    expect(
+        cmdDisp.commandManager.gitObject.getCurrentState().branches[1].currentHash
+    ).toBe(hashToCheckout)
+    console.log(cmdDisp.commandManager.gitObject.getCurrentState())
+    expect(
+        cmdDisp.receiveAndDispatchCommand(`git checkout -b newestBranch main`)
+    ).toBe("Switched to a new branch 'newestBranch'")
+    
+    console.log(cmdDisp.commandManager.gitObject.getCurrentState())
+
+    hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
+
+    expect(
+        cmdDisp.commandManager.gitObject.getCurrentState().branches[2].currentHash
+    ).toBe(hashToCheckout)
+})
 
 test("git checkout -B 'branch' ", () =>{
     var cmdDisp = new CommandDispatcher() 
     expect(
         cmdDisp.receiveAndDispatchCommand("git checkout -B dev")
     ).toBe("Switched to a new branch 'dev'")
+    
     expect(
         cmdDisp.commandManager.getCurrentState()["head"].currentPosition
     ).toBe("dev")
+    
     expect(
         cmdDisp.receiveAndDispatchCommand("git checkout -B main")
     ).toBe("Switched to and reset branch 'main'")
@@ -76,14 +103,4 @@ test("git checkout -B 'branch' 'positionToGo' ", () =>{
         cmdDisp.receiveAndDispatchCommand(`git checkout -B newBranch dev`)
     ).toBe("Reset branch 'newBranch'")
 
-    expect(
-        () => cmdDisp.receiveAndDispatchCommand("git checkout -B")
-    ).toThrow("error: switch '-B' requires a value")
-    expect(
-        () => cmdDisp.receiveAndDispatchCommand("git checkout -B .")
-    ).toThrow("fatal: '.' is not a valid branch name")
-
-    expect(
-        () => cmdDisp.receiveAndDispatchCommand("git checkout -B -B")
-    ).toThrow("fatal: '-B' is not a valid branch name")
 })

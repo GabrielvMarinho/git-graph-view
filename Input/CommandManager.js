@@ -7,29 +7,40 @@ export default class CommandManager{
     checkout(branchOrHash){
         return this.gitObject.updateCurrentPosition(branchOrHash)
     }
-    checkoutAndCreateBranch(command){
-        branch = command.extractValueFromFlag("-b")
-        this.gitObject.createBranch(branch)
-        this.gitObject.updateCurrentPosition(branch)
-        return `Switched to a new branch '${branch}'`
-    }
-    resetBranchToPosition(branch, positionToGo){
-        try{
+    checkoutCreateBranch(command){
+        const steps = (branch, positionToGo) =>{
             this.gitObject.updateCurrentPosition(positionToGo)
-        }catch{
-            throw new InvalidReferenceForBranchCreationException(branch, positionToGo)
+            this.gitObject.createBranch(branch)
+            this.gitObject.updateCurrentPosition(branch)
         }
-        this.gitObject.deleteBranch(branch)
+        branch = command.extractValueFromFlag("-b")
 
-        this.gitObject.createBranch(branch)
-        this.gitObject.updateCurrentPosition(branch)
-
-    }
-    checkoutAndCreateBranchIfExistsReset(command){
-        branch = command.extractValueFromFlag("-B")
-        positionToGo = command.extractSecondValueFromFlag("-B")
+        positionToGo = command.extractSecondValueFromFlag("-b")
+        
         if(positionToGo){
-            this.resetBranchToPosition(branch, positionToGo)
+            steps(branch, positionToGo)
+            return `Switched to a new branch '${branch}'`
+        }
+        steps(branch, this.gitObject.getCurrentHash())
+        return `Switched to a new branch '${branch}'` 
+    }
+    checkoutResetCreateBranch(command){
+        const steps = (branch, positionToGo) =>{
+            try{
+                this.gitObject.updateCurrentPosition(positionToGo)
+            }catch{
+                throw new InvalidReferenceForBranchCreationException(branch, positionToGo)
+            }
+            this.gitObject.deleteBranch(branch)
+            this.gitObject.createBranch(branch)
+            this.gitObject.updateCurrentPosition(branch)
+        }
+        branch = command.extractValueFromFlag("-B")
+
+        positionToGo = command.extractSecondValueFromFlag("-B")
+        
+        if(positionToGo){
+            steps(branch, positionToGo)
             return `Reset branch '${branch}'`
         }
         if(this.gitObject.branchAlreadyExist(branch) && this.gitObject.getCurrentBranch().name==branch){
@@ -37,15 +48,14 @@ export default class CommandManager{
             return `Reset branch '${branch}'`
         }
         if(this.gitObject.branchAlreadyExist(branch)){
-            this.resetBranchToPosition(branch, this.gitObject.getCurrentHash())
+            steps(branch, this.gitObject.getCurrentHash())
             return `Switched to and reset branch '${branch}'`
         }
 
-        this.resetBranchToPosition(branch, this.gitObject.getCurrentHash())
-        return `Switched to a new branch '${branch}'`   
-        
-        
+        steps(branch, this.gitObject.getCurrentHash())
+        return `Switched to a new branch '${branch}'`  
     }
+ 
    
     commit(command){
         message = command.extractValueFromFlag("-m")
