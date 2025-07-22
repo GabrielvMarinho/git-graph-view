@@ -67,10 +67,20 @@ export default class CommandManager{
  
    
     commit(command){
+        
+
         message = command.extractValueFromFlag("-m")
-        var sha = this.gitObject.createCommit(message)
+
+        this.gitObject.createCommit(message)
+        
+
         var positionString = this.gitObject.getCurrentBranchAndHashString()  
-        return `[${positionString}] ${message}`
+        if(message){
+            return `[${positionString}] ${message}`
+        }else{
+            return `[${positionString}]`
+        }
+        
     }
 
     

@@ -31,12 +31,12 @@ export default class GitObject{
     }
     
     getCurrentBranchAndHashString(){
-        var position = this.head.currentPosition 
+        var position = this.head.currentPosition.slice(0, 7)
         var branch = this.getCurrentBranch()
-        if(branch.name){
-            return `${position} ${branch.currentHash}`
+        if(branch && branch.name){
+            return `${position} ${branch.currentHash.slice(0, 7)}`
         }
-        return `${position}`
+        return `detached HEAD ${position}`
     }
     getGraph(){
         return this.graph
@@ -103,7 +103,7 @@ export default class GitObject{
 
         }
         else{
-            var commitHash = Object.keys(this.getGraph()).find(id => id == branchOrHash)
+            var commitHash = Object.keys(this.getGraph()).find(id => id.startsWith(branchOrHash))
             if(commitHash){
                 this.head.currentPosition = commitHash
                 return 
