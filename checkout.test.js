@@ -29,6 +29,20 @@ test("git checkout -b 'branch'", () =>{
     expect(
         cmdDisp.commandManager.getCurrentState()["head"].currentPosition
     ).toBe("dev")
+
+
+    
+    currentHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand(`git checkout ${currentHash}`)
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git checkout -b newestBranch")
+    ).toBe("Switched to a new branch 'newestBranch'")
+    expect(
+        cmdDisp.commandManager.gitObject.getCurrentState().head.currentPosition
+    ).toBe("newestBranch")
+    
+
+
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git checkout -b main")
     ).toThrow("fatal: a branch named 'main' already exists")
@@ -42,6 +56,8 @@ test("git checkout -b 'branch'", () =>{
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git checkout -b -b")
     ).toThrow("fatal: '-b' is not a valid branch name")
+
+
 })
 
 test("git checkout -b 'branch' 'positionToGo'", () =>{
@@ -64,6 +80,7 @@ test("git checkout -b 'branch' 'positionToGo'", () =>{
     expect(
         cmdDisp.commandManager.gitObject.getCurrentState().branches[2].currentHash
     ).toBe(hashToCheckout)
+    
 })
 
 test("git checkout -B 'branch' ", () =>{
