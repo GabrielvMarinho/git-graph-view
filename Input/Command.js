@@ -16,7 +16,9 @@ export default class Command{
             throw new InvalidCommandException()
         }
     }
-
+    extractValueInPosition(index){
+        // no impl
+    }
     extractValueFromFlag(flag){
         const index = this._arguments.indexOf(flag);
         if (index !== -1) {

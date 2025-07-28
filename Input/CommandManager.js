@@ -66,8 +66,11 @@ export default class CommandManager{
     }
  
    
-    commit(command){
+    merge(command){
+        branchToMerge = command.extractValueInPosition("")
         
+    }
+    commit(command){        
 
         message = command.extractValueFromFlag("-m")
 

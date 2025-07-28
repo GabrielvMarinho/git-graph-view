@@ -16,17 +16,21 @@ export default class CommandDispatcher{
             "-b": () => this.commandManager.checkoutCreateBranch(command),
             "-B": () => this.commandManager.checkoutResetCreateBranch(command),
         }
-        
         const defualtFunction = () => this.commandManager.checkout(command)
         return this.executeAllFlags(command, flagFunctions, defualtFunction);
-       
+    }
+    merge(command){
+        const flagFunctions = {
+            "--squash": () => this.commandManager.mergeSquash(command),
+        }
         
-        
+        const defualtFunction = () => this.commandManager.merge(command)
+
+        return this.executeAllFlags(command, flagFunctions, defualtFunction);
     }
     commit(command){
         return this.commandManager.commit(command)
     }
-
 
     executeAllFlags(command, flagFunctions, defualtFunction){
         for (const flag of command._arguments) {
