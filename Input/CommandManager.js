@@ -8,7 +8,7 @@ export default class CommandManager{
         
         branchOrHash = command._arguments[command._arguments.length - 1]
 
-        this.gitObject.updateCurrentPosition(branchOrHash)
+        this.gitObject.updateCurrentHashOrBranchPointer(branchOrHash)
         if(this.gitObject.isBranch(branchOrHash)){
             return `Switched to branch '${branchOrHash}'`
         }
@@ -18,9 +18,9 @@ export default class CommandManager{
     }
     checkoutCreateBranch(command){
         const steps = (branch, positionToGo) =>{
-            this.gitObject.updateCurrentPosition(positionToGo)
+            this.gitObject.updateCurrentHashOrBranchPointer(positionToGo)
             this.gitObject.createBranch(branch)
-            this.gitObject.updateCurrentPosition(branch)
+            this.gitObject.updateCurrentHashOrBranchPointer(branch)
         }
         branch = command.extractValueFromFlag("-b")
 
@@ -36,13 +36,13 @@ export default class CommandManager{
     checkoutResetCreateBranch(command){
         const steps = (branch, positionToGo) =>{
             try{
-                this.gitObject.updateCurrentPosition(positionToGo)
+                this.gitObject.updateCurrentHashOrBranchPointer(positionToGo)
             }catch{
                 throw new InvalidReferenceForBranchCreationException(branch, positionToGo)
             }
             this.gitObject.deleteBranch(branch)
             this.gitObject.createBranch(branch)
-            this.gitObject.updateCurrentPosition(branch)
+            this.gitObject.updateCurrentHashOrBranchPointer(branch)
         }
         branch = command.extractValueFromFlag("-B")
 

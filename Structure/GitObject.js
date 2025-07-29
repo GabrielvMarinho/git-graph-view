@@ -50,6 +50,33 @@ export default class GitObject{
             return false
         }
     }
+    isMergeFastForward(branchToMerge){
+        const graph = this.getGraph()
+        
+        var currentHash = this.getCurrentHash()
+        
+        var ancestors = [this.getHashFrom(branchToMerge)]
+        var position = 0
+        var hashToCheck = ancestors[position]
+        do{
+            
+            // Means the current commit is an ancestor of the place to merge
+            if(hashToCheck == currentHash){
+                return true
+            }
+            else{
+                for(let i = 0; i<graph[hashToCheck].parents.length; i++ ){
+                    ancestors.push(graph[hashToCheck].parents[i])
+                }
+            }
+            position++
+            hashToCheck = ancestors[position]
+
+            
+        }while(hashToCheck)
+        
+        return false
+    }
     getRandomSha(){
         return crypto.randomBytes(20).toString("hex");
     }
@@ -67,9 +94,9 @@ export default class GitObject{
     }
     // return the hash from the branch or just the sent value 
     getHashFrom(branchOrHash){
-        var commit = Object.keys(this.getGraph()).find(id => id == hash)
-        if(commit != null){
-            var branch = this.branches.find(branch => this.head.currentPosition == branch.name)
+        var hash = Object.keys(this.getGraph()).find(id => id == branchOrHash)
+        if(hash == null){
+            var branch = this.branches.find(branch => branch.name == branchOrHash)
             return branch.currentHash
         }
         else{
@@ -77,7 +104,7 @@ export default class GitObject{
         }
     }
     // changes the current position to either a hash or if its a branch name, changes the branch hash
-    updateCurrentPositionAndMoveBranch(branchOrHash){
+    updateCurrentHashOrBranchPointerAndMoveBranch(branchOrHash){
         currentPosition = this.head.currentPosition
         var branch = this.branches.find(branch => branch.name == currentPosition)
         if(branch){
@@ -95,7 +122,7 @@ export default class GitObject{
         }   
     }
     // changes the current position to either a hash or branch name, doesnt change the actual position
-    updateCurrentPosition(branchOrHash){
+    updateCurrentHashOrBranchPointer(branchOrHash){
         var branch = this.branches.find(branch => branch.name == branchOrHash)
         if(branch){
             this.head.currentPosition = branch.name
@@ -146,7 +173,7 @@ export default class GitObject{
         const newCommitSha = this.getRandomSha()
         const newCommit = new Commit(message, currentHash)
         this.graph[newCommitSha] = newCommit
-        this.updateCurrentPositionAndMoveBranch(newCommitSha)
+        this.updateCurrentHashOrBranchPointerAndMoveBranch(newCommitSha)
         return newCommitSha
     }
     
