@@ -33,11 +33,15 @@ export default class GitObject{
     
     getCurrentBranchAndHashString(){
         var position = this.head.currentPosition.slice(0, 7)
-        var branch = this.getCurrentBranch()
-        if(branch && branch.name){
-            return `${position} ${branch.currentHash.slice(0, 7)}`
+        try{
+            var branch = this.getCurrentBranch()
+            if(branch && branch.name){
+                return `${position} ${branch.currentHash.slice(0, 7)}`
+            }
+        }catch(e){
+            return `detached HEAD ${position}`
         }
-        return `detached HEAD ${position}`
+        
     }
     getGraph(){
         return this.graph
