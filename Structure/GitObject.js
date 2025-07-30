@@ -130,6 +130,7 @@ export default class GitObject{
             branch.currentHash = branchOrHash
         }
         else{
+            
             var commitHash = Object.keys(this.getGraph()).find(id => id == branchOrHash)
             if(commitHash){
                 this.head.currentPosition = commitHash
@@ -185,9 +186,7 @@ export default class GitObject{
 
     
     createCommit(message){
-        
         const currentHash = this.getCurrentHash()
-
         const newCommitSha = this.getRandomSha()
         const newCommit = new Commit(message, currentHash)
         this.graph[newCommitSha] = newCommit

@@ -24,3 +24,27 @@ test("fast forward or normal merge checking", ()=>{
     
 })
 
+
+test("fast forward merge in branch to branch", ()=>{
+    const cmdDisp = new CommandDispatcher()
+    var firstHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git checkout -b dev")    
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    var secondHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git checkout main")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git merge dev")
+    ).toBe(`Updating ${firstHash.slice(0, 7)}..${secondHash.slice(0, 7)}\nFast-forward`)
+
+})
+test("fast forward merge in detached head to branch", ()=>{
+    const cmdDisp = new CommandDispatcher()
+    var firstHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    var secondHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand(`git checkout ${firstHash}`)
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git merge main")
+    ).toBe(`Updating ${firstHash.slice(0, 7)}..${secondHash.slice(0, 7)}\nFast-forward`)
+
+})

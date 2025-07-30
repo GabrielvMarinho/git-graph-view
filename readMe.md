@@ -19,3 +19,7 @@ if it appear two function calling from the flagFunctions, this shouls throw an e
 The return of the functions should be a string containing the message that would appear in git feedback, CommandManager should handle the building of the string to return
 
 gitobject should be responsible for most error throwing like not valid branch names or already existing branches
+
+
+
+generally the commandManager function is directly called, when a more complex conditional like is fast forward or not, it can call another function in the CommandManager class

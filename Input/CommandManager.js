@@ -67,8 +67,21 @@ export default class CommandManager{
  
    
     merge(command){
-        branchToMerge = command.extractValueInPosition("")
-        
+        hashOrBranchToMove = command.extractValueAfterWord("merge")
+        if(this.gitObject.isMergeFastForward(hashOrBranchToMove)){
+            return this.mergeFastForward(hashOrBranchToMove)
+        }else{
+            return this.mergeNotFastForward()
+        }
+    }
+    mergeNotFastForward(hashOrBranchToMove){
+        //to do
+    }
+    mergeFastForward(hashOrBranchToMove){
+        var currentHash = this.gitObject.getCurrentHash()
+        var hashToMerged = this.gitObject.getHashFrom(hashOrBranchToMove)
+        this.gitObject.updateCurrentHashOrBranchPointerAndMoveBranch(hashToMerged)
+        return `Updating ${currentHash.slice(0, 7)}..${hashToMerged.slice(0, 7)}\nFast-forward`
     }
     commit(command){        
 

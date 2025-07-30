@@ -3,7 +3,7 @@ import CommandManager from "./CommandManager"
 
 export default class CommandDispatcher{
     
-    validCommands = ["checkout", "commit"]
+    validCommands = ["checkout", "commit", "merge"]
     commandManager = new CommandManager()
 
     receiveAndDispatchCommand(commandString){
