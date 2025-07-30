@@ -80,7 +80,7 @@ export default class CommandManager{
     mergeFastForward(hashOrBranchToMove){
         var currentHash = this.gitObject.getCurrentHash()
         var hashToMerged = this.gitObject.getHashFrom(hashOrBranchToMove)
-        this.gitObject.updateCurrentHashOrBranchPointerAndMoveBranch(hashToMerged)
+        this.gitObject.updateCurrentHashOrBranchPointerToHash(hashToMerged)
         return `Updating ${currentHash.slice(0, 7)}..${hashToMerged.slice(0, 7)}\nFast-forward`
     }
     commit(command){        
