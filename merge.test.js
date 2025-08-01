@@ -36,6 +36,13 @@ test("fast forward merge in branch to branch", ()=>{
         cmdDisp.receiveAndDispatchCommand("git merge dev")
     ).toBe(`Updating ${firstHash.slice(0, 7)}..${secondHash.slice(0, 7)}\nFast-forward`)
 
+    var currentBranch = cmdDisp.commandManager.gitObject.getCurrentBranch()
+    expect(
+        currentBranch.name
+    ).toBe("main")
+    expect(
+        currentBranch.currentHash
+    ).toBe(secondHash)
 })
 test("fast forward merge in detached head to branch", ()=>{
     const cmdDisp = new CommandDispatcher()
@@ -46,5 +53,52 @@ test("fast forward merge in detached head to branch", ()=>{
     expect(
         cmdDisp.receiveAndDispatchCommand("git merge main")
     ).toBe(`Updating ${firstHash.slice(0, 7)}..${secondHash.slice(0, 7)}\nFast-forward`)
+    
+    expect(
+        () => cmdDisp.commandManager.gitObject.getCurrentBranch()
+    ).toThrow("Not in a branch currently")
+    expect(
+        cmdDisp.commandManager.gitObject.getCurrentHash()
+    ).toBe(secondHash)
+})
+
+test("fast forward merge in detached head to detached head", ()=>{
+    const cmdDisp = new CommandDispatcher()
+    var firstHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    var secondHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand(`git checkout ${firstHash}`)
+
+    expect(
+        cmdDisp.receiveAndDispatchCommand(`git merge ${secondHash}`)
+    ).toBe(`Updating ${firstHash.slice(0, 7)}..${secondHash.slice(0, 7)}\nFast-forward`)
+
+    expect(
+        () => cmdDisp.commandManager.gitObject.getCurrentBranch()
+    ).toThrow("Not in a branch currently")
+    expect(
+        cmdDisp.commandManager.gitObject.getCurrentHash()
+    ).toBe(secondHash)
+
+})
+test("fast forward merge in branch to detached head", ()=>{
+    const cmdDisp = new CommandDispatcher()
+    var firstHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand(`git checkout ${firstHash}`)
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    var secondHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git checkout main")
+
+    expect(
+        cmdDisp.receiveAndDispatchCommand(`git merge ${secondHash}`)
+    ).toBe(`Updating ${firstHash.slice(0, 7)}..${secondHash.slice(0, 7)}\nFast-forward`)
+
+    var currentBranch = cmdDisp.commandManager.gitObject.getCurrentBranch()
+    expect(
+        currentBranch.name
+    ).toBe("main")
+    expect(
+        currentBranch.currentHash
+    ).toBe(secondHash)
 
 })
