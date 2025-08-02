@@ -1,4 +1,4 @@
-import CommandDispatcher from "./Input/CommandDispatcher"
+import CommandDispatcher from "../../Input/CommandDispatcher"
 
 test("fast forward or normal merge checking", ()=>{
     const cmdDisp = new CommandDispatcher()

@@ -1,4 +1,4 @@
-import CommandDispatcher from "./Input/CommandDispatcher"
+import CommandDispatcher from "../Input/CommandDispatcher"
 
 test("git commit", () =>{
     const cmdDisp = new CommandDispatcher()

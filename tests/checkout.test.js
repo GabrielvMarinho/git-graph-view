@@ -1,4 +1,4 @@
-import CommandDispatcher from "./Input/CommandDispatcher"
+import CommandDispatcher from "../Input/CommandDispatcher"
 test("git checkout 'branchOrHash'", () =>{
     var cmdDisp = new CommandDispatcher() 
     hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()

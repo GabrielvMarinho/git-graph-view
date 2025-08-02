@@ -184,7 +184,14 @@ export default class GitObject{
         
     }
 
-    
+    createMergeCommit(message, hashTomerge){
+        const currentHash = this.getCurrentHash()
+        const newCommitSha = this.getRandomSha()
+        const newCommit = new Commit(message, currentHash, hashTomerge)
+        this.graph[newCommitSha] = newCommit
+        this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
+        return newCommitSha
+    }
     createCommit(message){
         const currentHash = this.getCurrentHash()
         const newCommitSha = this.getRandomSha()

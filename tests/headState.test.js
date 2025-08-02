@@ -1,4 +1,4 @@
-import CommandDispatcher from "./Input/CommandDispatcher"
+import CommandDispatcher from "../Input/CommandDispatcher"
 
 test("detached head", () =>{
     const cmdDisp = new CommandDispatcher()

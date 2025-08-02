@@ -68,14 +68,41 @@ export default class CommandManager{
    
     merge(command){
         hashOrBranchToMove = command.extractValueAfterWord("merge")
+        
         if(this.gitObject.isMergeFastForward(hashOrBranchToMove)){
             return this.mergeFastForward(hashOrBranchToMove)
         }else{
-            return this.mergeNotFastForward()
+            const message = command.extractValueFromFlag("-m")
+            
+            return this.normalMerge(hashOrBranchToMove, message)
         }
     }
-    mergeNotFastForward(hashOrBranchToMove){
-        //to do
+    normalMerge(hashOrBranchToMove, message){
+        var hashToMerge = this.gitObject.getHashFrom(hashOrBranchToMove)
+        var currentBranch = this.gitObject.getCurrentBranch()
+        if(this.gitObject.isHeadDetached()){
+            if(this.gitObject.isBranch(hashOrBranchToMove)){
+                const returnMessage = `Merge commit '${hashToMerge}' into HEAD`
+                this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
+                return returnMessage
+            }
+            else{
+                const returnMessage = `Merge commit '${hashToMerge}' into HEAD` 
+                this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
+                return returnMessage
+            }
+        }else{
+            if(this.gitObject.isBranch(hashOrBranchToMove)){
+                const returnMessage = `Merge branch '${hashOrBranchToMove}' into ${currentBranch.name}`
+                this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
+                return returnMessage
+            }
+            else{
+                const returnMessage = `Merge commit '${hashToMerge}' into ${currentBranch.name}` 
+                this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
+                return returnMessage
+            }
+        }
     }
     mergeFastForward(hashOrBranchToMove){
         var currentHash = this.gitObject.getCurrentHash()
