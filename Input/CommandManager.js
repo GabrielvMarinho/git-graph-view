@@ -79,26 +79,27 @@ export default class CommandManager{
     }
     normalMerge(hashOrBranchToMove, message){
         var hashToMerge = this.gitObject.getHashFrom(hashOrBranchToMove)
-        var currentBranch = this.gitObject.getCurrentBranch()
         if(this.gitObject.isHeadDetached()){
             if(this.gitObject.isBranch(hashOrBranchToMove)){
-                const returnMessage = `Merge commit '${hashToMerge}' into HEAD`
+                const returnMessage = `Merge commit '${hashToMerge.slice(0, 7)}' into HEAD`
                 this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
                 return returnMessage
             }
             else{
-                const returnMessage = `Merge commit '${hashToMerge}' into HEAD` 
+                const returnMessage = `Merge commit '${hashToMerge.slice(0, 7)}' into HEAD` 
                 this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
                 return returnMessage
             }
         }else{
+            var currentBranch = this.gitObject.getCurrentBranch()
+
             if(this.gitObject.isBranch(hashOrBranchToMove)){
                 const returnMessage = `Merge branch '${hashOrBranchToMove}' into ${currentBranch.name}`
                 this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
                 return returnMessage
             }
             else{
-                const returnMessage = `Merge commit '${hashToMerge}' into ${currentBranch.name}` 
+                const returnMessage = `Merge commit '${hashToMerge.slice(0, 7)}' into ${currentBranch.name}` 
                 this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
                 return returnMessage
             }
