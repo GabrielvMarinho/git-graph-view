@@ -125,12 +125,10 @@ export default class GitObject{
     updateCurrentHashOrBranchPointerToHash(hash){
         currentPosition = this.head.currentPosition
         var branch = this.branches.find(branch => branch.name == currentPosition)
-        if(branch){
-            
+        if(branch){  
             branch.currentHash = hash
         }
         else{
-            
             var commitHash = Object.keys(this.getGraph()).find(id => id == hash)
             if(commitHash){
                 this.head.currentPosition = commitHash
@@ -144,6 +142,7 @@ export default class GitObject{
     updateCurrentHashOrBranchPointer(branchOrHash){
         var branch = this.branches.find(branch => branch.name == branchOrHash)
         if(branch){
+          
             this.head.currentPosition = branch.name
             return
 

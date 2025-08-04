@@ -3,14 +3,15 @@ import CommandManager from "./CommandManager"
 
 export default class CommandDispatcher{
     
-    validCommands = ["checkout", "commit", "merge"]
+    validCommands = ["checkout", "commit", "merge", "reset"]
     commandManager = new CommandManager()
 
     receiveAndDispatchCommand(commandString){
         var command = new Command(commandString, this.validCommands)
         return this[command.subcommand](command)
     }
-
+   
+    
     checkout(command){
         const flagFunctions = {
             "-b": () => this.commandManager.checkoutCreateBranch(command),
@@ -30,6 +31,10 @@ export default class CommandDispatcher{
     }
     commit(command){
         return this.commandManager.commit(command)
+    }
+
+    reset(command){
+        return this.commandManager.reset(command)
     }
 
     executeAllFlags(command, flagFunctions, defaultFunction){

@@ -111,6 +111,10 @@ export default class CommandManager{
         this.gitObject.updateCurrentHashOrBranchPointerToHash(hashToMerged)
         return `Updating ${currentHash.slice(0, 7)}..${hashToMerged.slice(0, 7)}\nFast-forward`
     }
+    reset(command){
+        hashToReset = this.gitObject.getHashFrom(command.extractValueAfterWord("reset"))
+        this.gitObject.updateCurrentHashOrBranchPointerToHash(hashToReset)
+    }
     commit(command){        
 
         message = command.extractValueFromFlag("-m")
