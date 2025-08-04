@@ -1,3 +1,4 @@
+import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash"
 import CommandDispatcher from "../Input/CommandDispatcher"
 test("git checkout 'branchOrHash'", () =>{
     var cmdDisp = new CommandDispatcher() 
@@ -19,6 +20,10 @@ test("git checkout 'branchOrHash'", () =>{
     expect(
         cmdDisp.commandManager.gitObject.getCurrentState().head.currentPosition
     ).toBe(hashToCheckout)
+
+    expect(
+        () => {cmdDisp.receiveAndDispatchCommand("git checkout nonexisting")}
+    ).toThrow(NoBranchNorCommitHash)
 })
 
 test("git checkout -b 'branch'", () =>{
