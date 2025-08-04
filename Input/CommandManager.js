@@ -111,6 +111,21 @@ export default class CommandManager{
         this.gitObject.updateCurrentHashOrBranchPointerToHash(hashToMerged)
         return `Updating ${currentHash.slice(0, 7)}..${hashToMerged.slice(0, 7)}\nFast-forward`
     }
+    mergeSquash(command){
+        var hashOrBranchToMove = command.extractValueAfterWord("merge")
+        this.gitObject.createCommit("Squash merge")
+        if(this.gitObject.isHeadDetached){
+            var message = this.gitObject.getCurrentBranchAndHashString()
+            return `[${message}] Squash merge commit`
+        }
+        else{
+            var currentBranch = this.gitObject.getCurrentBranch()
+            var message = this.gitObject.getCurrentBranchAndHashString()
+            return `[${message}] Squash merge commit`
+        }
+        
+        
+    }
     reset(command){
         hashToReset = this.gitObject.getHashFrom(command.extractValueAfterWord("reset"))
         this.gitObject.updateCurrentHashOrBranchPointerToHash(hashToReset)
