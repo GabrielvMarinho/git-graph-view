@@ -1,8 +1,11 @@
 import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash"
 import CommandDispatcher from "../Input/CommandDispatcher"
+import GitObject from "../GitObjectStructure/GitObject";
+
 test("git checkout 'branchOrHash'", () =>{
-    var cmdDisp = new CommandDispatcher() 
-    hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject) 
+    hashToCheckout = gitObject.getCurrentHash()
 
     cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
     expect(
@@ -10,7 +13,7 @@ test("git checkout 'branchOrHash'", () =>{
     ).toBe("Switched to branch 'main'")
 
     expect(
-        cmdDisp.commandManager.gitObject.getCurrentState().head.currentPosition
+        gitObject.getCurrentState().head.currentPosition
     ).toBe("main")
 
     expect(
@@ -18,7 +21,7 @@ test("git checkout 'branchOrHash'", () =>{
     ).toBe(`Note: switching to ${hashToCheckout}.\nYou are in 'detached HEAD' state`)
 
     expect(
-        cmdDisp.commandManager.gitObject.getCurrentState().head.currentPosition
+        gitObject.getCurrentState().head.currentPosition
     ).toBe(hashToCheckout)
 
     expect(
@@ -27,23 +30,24 @@ test("git checkout 'branchOrHash'", () =>{
 })
 
 test("git checkout -b 'branch'", () =>{
-    var cmdDisp = new CommandDispatcher() 
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject) 
     expect(
         cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
     ).toBe("Switched to a new branch 'dev'")
     expect(
-        cmdDisp.commandManager.getCurrentState()["head"].currentPosition
+        gitObject.getCurrentState()["head"].currentPosition
     ).toBe("dev")
 
 
     
-    currentHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    currentHash = gitObject.getCurrentHash()
     cmdDisp.receiveAndDispatchCommand(`git checkout ${currentHash}`)
     expect(
         cmdDisp.receiveAndDispatchCommand("git checkout -b newestBranch")
     ).toBe("Switched to a new branch 'newestBranch'")
     expect(
-        cmdDisp.commandManager.gitObject.getCurrentState().head.currentPosition
+        gitObject.getCurrentState().head.currentPosition
     ).toBe("newestBranch")
     
 
@@ -66,8 +70,10 @@ test("git checkout -b 'branch'", () =>{
 })
 
 test("git checkout -b 'branch' 'positionToGo'", () =>{
-    var cmdDisp = new CommandDispatcher() 
-    hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
+    const gitObject = new GitObject()
+
+    const cmdDisp = new CommandDispatcher(gitObject) 
+    hashToCheckout = gitObject.getCurrentHash()
     cmdDisp.receiveAndDispatchCommand("git commit -m 'test'")
     
     expect(
@@ -75,27 +81,28 @@ test("git checkout -b 'branch' 'positionToGo'", () =>{
     ).toBe("Switched to a new branch 'newBranch'")
     
     expect(
-        cmdDisp.commandManager.gitObject.getCurrentState().branches[1].currentHash
+        gitObject.getCurrentState().branches[1].currentHash
     ).toBe(hashToCheckout)
     expect(
         cmdDisp.receiveAndDispatchCommand(`git checkout -b newestBranch main`)
     ).toBe("Switched to a new branch 'newestBranch'")
-    hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
+    hashToCheckout = gitObject.getCurrentHash()
 
     expect(
-        cmdDisp.commandManager.gitObject.getCurrentState().branches[2].currentHash
+        gitObject.getCurrentState().branches[2].currentHash
     ).toBe(hashToCheckout)
     
 })
 
 test("git checkout -B 'branch' ", () =>{
-    var cmdDisp = new CommandDispatcher() 
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject) 
     expect(
         cmdDisp.receiveAndDispatchCommand("git checkout -B dev")
     ).toBe("Switched to a new branch 'dev'")
     
     expect(
-        cmdDisp.commandManager.getCurrentState()["head"].currentPosition
+        gitObject.getCurrentState()["head"].currentPosition
     ).toBe("dev")
     
     expect(
@@ -117,8 +124,9 @@ test("git checkout -B 'branch' ", () =>{
 })
 
 test("git checkout -B 'branch' 'positionToGo' ", () =>{
-    var cmdDisp = new CommandDispatcher() 
-    hashToCheckout = cmdDisp.commandManager.gitObject.getCurrentHash()
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject) 
+    hashToCheckout = gitObject.getCurrentHash()
     expect(
         cmdDisp.receiveAndDispatchCommand("git checkout -B dev")
     ).toBe("Switched to a new branch 'dev'")
@@ -136,7 +144,7 @@ test("git checkout -B 'branch' 'positionToGo' ", () =>{
     ).toBe("Reset branch 'newBranch'")
     
     expect(
-        cmdDisp.commandManager.gitObject.getCurrentState().branches[2].currentHash
+        gitObject.getCurrentState().branches[2].currentHash
     ).toBe(hashToCheckout)
 
     expect(

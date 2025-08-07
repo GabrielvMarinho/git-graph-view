@@ -4,9 +4,7 @@ import stringArgv from 'string-argv';
 import ValueNotFoundInCommand from "../Errors/ValueNotFoundInCommand";
 
 export default class Command{
-    
-    
-    
+
     constructor(commandString, validCommands){
         const _arguments = stringArgv(commandString);
         var subcommand = _arguments[1]

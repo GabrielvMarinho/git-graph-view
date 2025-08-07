@@ -1,5 +1,4 @@
 import Command from "../Input/Command"
-import CommandDispatcher from "../Input/CommandDispatcher"
 
 test("extracting value after word", () =>{
     var command = new Command("git merge value", ["merge"])

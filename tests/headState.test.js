@@ -1,13 +1,16 @@
 import CommandDispatcher from "../Input/CommandDispatcher"
+import GitObject from "../GitObjectStructure/GitObject";
 
 test("detached head", () =>{
-    const cmdDisp = new CommandDispatcher()
-    currentHash = cmdDisp.commandManager.gitObject.getCurrentHash()
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)    
+    
+    currentHash = gitObject.getCurrentHash()
     expect(
-        cmdDisp.commandManager.gitObject.isHeadDetached()
+        gitObject.isHeadDetached()
     ).toBe(false)
     cmdDisp.receiveAndDispatchCommand(`git checkout ${currentHash}`)
     expect(
-        cmdDisp.commandManager.gitObject.isHeadDetached()
+        gitObject.isHeadDetached()
     ).toBe(true)
 })

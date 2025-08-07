@@ -1,11 +1,20 @@
+import CheckoutHandler from "./CommandHandlers/CheckoutHandler"
 import Command from "./Command"
-import CommandManager from "./CommandManager"
+import CommitHandler from "./CommandHandlers/CommitHandler"
+import MergeHandler from "./CommandHandlers/MergeHandler"
+import ResetHandler from "./CommandHandlers/ResetHandler"
 
 export default class CommandDispatcher{
     
     validCommands = ["checkout", "commit", "merge", "reset"]
-    commandManager = new CommandManager()
+    constructor(gitObject){
+        this.gitObject = gitObject
+        this.checkoutHandler = new CheckoutHandler(gitObject)
+        this.commitHandler = new CommitHandler(gitObject)
+        this.resetHandler = new ResetHandler(gitObject)
+        this.mergeHandler = new MergeHandler(gitObject)
 
+    }
     receiveAndDispatchCommand(commandString){
         var command = new Command(commandString, this.validCommands)
         return this[command.subcommand](command)
@@ -14,27 +23,27 @@ export default class CommandDispatcher{
     
     checkout(command){
         const flagFunctions = {
-            "-b": () => this.commandManager.checkoutCreateBranch(command),
-            "-B": () => this.commandManager.checkoutResetCreateBranch(command),
+            "-b": () => this.checkoutHandler.checkoutCreateBranch(command),
+            "-B": () => this.checkoutHandler.checkoutResetCreateBranch(command),
         }
-        const defaultFunction = () => this.commandManager.checkout(command)
+        const defaultFunction = () => this.checkoutHandler.checkout(command)
         return this.executeAllFlags(command, flagFunctions, defaultFunction);
     }
     merge(command){
         const flagFunctions = {
-            "--squash": () => this.commandManager.mergeSquash(command),
+            "--squash": () => this.mergeHandler.mergeSquash(command),
         }
         
-        const defaultFunction = () => this.commandManager.merge(command)
+        const defaultFunction = () => this.mergeHandler.merge(command)
 
         return this.executeAllFlags(command, flagFunctions, defaultFunction);
     }
     commit(command){
-        return this.commandManager.commit(command)
+        return this.commitHandler.commit(command)
     }
 
     reset(command){
-        return this.commandManager.reset(command)
+        return this.resetHandler.reset(command)
     }
 
     executeAllFlags(command, flagFunctions, defaultFunction){

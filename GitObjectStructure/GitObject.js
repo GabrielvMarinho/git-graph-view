@@ -6,7 +6,6 @@ import BranchAlreadyExistException from "../Errors/BranchAlreadyExistException.j
 import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash.js";
 import { isValidBranchName } from "../utils.js";
 import NotValidBranchNameException from "../Errors/NotValidBranchNameException"
-import InvalidReferenceForBranchCreationException from "../Errors/InvalidReferenceForBranchCreationException.js";
 import NotInABranchError from "../Errors/NotInABranchError.js";
 
 export default class GitObject{
@@ -18,8 +17,8 @@ export default class GitObject{
         //default and only branch being main
         var main = new Branch("main", firstSha)
         this.head = new Head(main.getName())
-        
         this.branches = [main]
+        
     }
 
     getCurrentState(){

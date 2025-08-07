@@ -1,12 +1,15 @@
 import CommandDispatcher from "../Input/CommandDispatcher";
+import GitObject from "../GitObjectStructure/GitObject";
 
 test("git reset", ()=>{
-    const cmdDisp = new CommandDispatcher()
-    const firstSha = cmdDisp.commandManager.gitObject.getCurrentHash()
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)    
+    
+    const firstSha = gitObject.getCurrentHash()
     cmdDisp.receiveAndDispatchCommand("git commit")
     cmdDisp.receiveAndDispatchCommand("git commit")
     cmdDisp.receiveAndDispatchCommand(`git reset ${firstSha}`)
-    var curentBranch = cmdDisp.commandManager.gitObject.getCurrentBranch()
+    var curentBranch = gitObject.getCurrentBranch()
     expect(
         curentBranch.currentHash
     ).toBe(firstSha)
@@ -19,7 +22,7 @@ test("git reset", ()=>{
     cmdDisp.receiveAndDispatchCommand("git commit")
     cmdDisp.receiveAndDispatchCommand("git reset main")
     
-    var curentBranch = cmdDisp.commandManager.gitObject.getCurrentBranch()
+    var curentBranch = gitObject.getCurrentBranch()
     expect(
         curentBranch.currentHash
     ).toBe(firstSha)
@@ -31,12 +34,14 @@ test("git reset", ()=>{
 
 
 test("git reset --hard --soft --mixed", ()=>{
-    const cmdDisp = new CommandDispatcher()
-    const firstSha = cmdDisp.commandManager.gitObject.getCurrentHash()
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)    
+    
+    const firstSha = gitObject.getCurrentHash()
     cmdDisp.receiveAndDispatchCommand("git commit")
     cmdDisp.receiveAndDispatchCommand("git commit")
     cmdDisp.receiveAndDispatchCommand(`git reset --hard --mixed ${firstSha} --soft`)
-    var curentBranch = cmdDisp.commandManager.gitObject.getCurrentBranch()
+    var curentBranch = gitObject.getCurrentBranch()
     expect(
         curentBranch.currentHash
     ).toBe(firstSha)
