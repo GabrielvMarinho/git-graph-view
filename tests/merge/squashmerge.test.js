@@ -33,7 +33,7 @@ test("git merge --squash 'hash'", ()=>{
     var response = cmdDisp.receiveAndDispatchCommand(`git merge --squash ${hashToMerge}`)
 
     newSha = gitObject.getCurrentHash().slice(0, 7)
-    console.log(response)
+
     expect(response).toBe(`[main ${newSha}] Squash merge commit`)
     
 })
@@ -52,7 +52,7 @@ test("git merge --squash 'hash' in detached head", ()=>{
     var response = cmdDisp.receiveAndDispatchCommand(`git merge --squash ${hashToMerge}`)
 
     newSha = gitObject.getCurrentHash().slice(0, 7)
-    console.log(response)
+
     expect(response).toBe(`[detached HEAD ${newSha}] Squash merge commit`)
     
 })

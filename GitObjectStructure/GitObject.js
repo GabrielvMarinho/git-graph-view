@@ -198,9 +198,20 @@ export default class GitObject{
         this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
         return newCommitSha
     }
-    
 
-
-
+    getAllBranchesString(){
+        branchesString = ""
+        this.branches.forEach(branch =>{
+            if(this.getCurrentBranch() == branch){
+                branchesString = branchesString+"* "
+            }
+            else{
+                branchesString = branchesString+"  "
+            }
+            branchesString = branchesString+branch.name+"\n"
+        })
+        branchesString = branchesString.substring(0, branchesString.length-1)
+        return branchesString
+    }
 
 }
