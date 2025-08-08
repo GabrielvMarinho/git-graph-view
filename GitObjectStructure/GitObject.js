@@ -63,6 +63,16 @@ export default class GitObject{
             return false
         }
     }
+    isCurrentCommitChildLess(){
+        const currentHash = this.getCurrentHash()
+        let isChildLess = true
+        Object.values(this.graph).forEach(commit =>{
+            if(commit.parents.includes(currentHash)){
+                isChildLess = false
+            }
+        })
+        return isChildLess
+    }
     isMergeFastForward(branchToMerge){
         const graph = this.getGraph()
         
@@ -85,7 +95,6 @@ export default class GitObject{
             position++
             hashToCheck = ancestors[position]
 
-            
         }while(hashToCheck)
         
         return false
