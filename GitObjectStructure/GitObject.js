@@ -74,7 +74,7 @@ export default class GitObject{
         do{
             
             // Means the current commit is an ancestor
-            if(currentHash == hashToCheck){
+            if(currentHash == hashToCheck && position !=0){
                 return true
             }
             else{
@@ -100,7 +100,7 @@ export default class GitObject{
         do{
             
             // Means the current commit is an ancestor
-            if(hashToCheck == currentHash){
+            if(hashToCheck == currentHash && position !=0){
                 return true
             }
             else{
