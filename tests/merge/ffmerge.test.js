@@ -13,15 +13,15 @@ test("fast forward or normal merge checking", ()=>{
     cmdDisp.receiveAndDispatchCommand("git checkout main")
 
     expect(
-        gitObject.isMergeFastForward("dev")
+        gitObject.isCurrentCommitAnAncestorOf("dev")
     ).toBe(true)
     cmdDisp.receiveAndDispatchCommand("git commit")
     expect(
-        gitObject.isMergeFastForward("dev")
+        gitObject.isCurrentCommitAnAncestorOf("dev")
     ).toBe(false)
     cmdDisp.receiveAndDispatchCommand("git checkout dev")
     expect(
-        gitObject.isMergeFastForward("main")
+        gitObject.isCurrentCommitAnAncestorOf("main")
     ).toBe(false)
     
     

@@ -1,16 +1,31 @@
 import GitObject from "../GitObjectStructure/GitObject"
 import CommandDispatcher from "../Input/CommandDispatcher"
 
-test("childless commit", ()=>{
+test("is a specific commit ancestor of current commit", ()=>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject)
-    expect(
-        gitObject.isCurrentCommitChildLess()
-    ).toBe(true)
-    cmdDisp.receiveAndDispatchCommand("git branch dev")
+    const firstSha = gitObject.getCurrentHash()
     cmdDisp.receiveAndDispatchCommand("git commit")
-    cmdDisp.receiveAndDispatchCommand("git checkout dev")
+    const secondSha = gitObject.getCurrentHash()
+
     expect(
-        gitObject.isCurrentCommitChildLess() 
+        gitObject.isSpecificCommitAnAncestorOfCurrentCommit(firstSha)
+    ).toBe(true)
+    
+})
+
+test("is a current commit ancestor of specific commit", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    const firstSha = gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    const secondHash = gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand(`git checkout ${firstSha}`)
+
+    expect(
+        gitObject.isCurrentCommitAnAncestorOf(secondHash)
+    ).toBe(true)
+    expect(
+        gitObject.isCurrentCommitAnAncestorOf(firstSha)
     ).toBe(false)
 })

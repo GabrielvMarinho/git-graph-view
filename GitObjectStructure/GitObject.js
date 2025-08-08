@@ -63,28 +63,44 @@ export default class GitObject{
             return false
         }
     }
-    isCurrentCommitChildLess(){
-        const currentHash = this.getCurrentHash()
-        let isChildLess = true
-        Object.values(this.graph).forEach(commit =>{
-            if(commit.parents.includes(currentHash)){
-                isChildLess = false
+    isSpecificCommitAnAncestorOfCurrentCommit(branchOrHash){
+        const graph = this.getGraph()
+        
+        var hashToCheck = branchOrHash
+        
+        var ancestors = [this.getCurrentHash()]
+        var position = 0
+        var currentHash = ancestors[position]
+        do{
+            
+            // Means the current commit is an ancestor
+            if(currentHash == hashToCheck && position !=0){
+                return true
             }
-        })
-        return isChildLess
+            else{
+                for(let i = 0; i<graph[currentHash].parents.length; i++ ){
+                    ancestors.push(graph[currentHash].parents[i])
+                }
+            }
+            position++
+            currentHash = ancestors[position]
+
+        }while(hashToCheck)
+        
+        return false
     }
-    isMergeFastForward(branchToMerge){
+    isCurrentCommitAnAncestorOf(branchOrHash){
         const graph = this.getGraph()
         
         var currentHash = this.getCurrentHash()
         
-        var ancestors = [this.getHashFrom(branchToMerge)]
+        var ancestors = [this.getHashFrom(branchOrHash)]
         var position = 0
         var hashToCheck = ancestors[position]
         do{
             
-            // Means the current commit is an ancestor of the place to merge
-            if(hashToCheck == currentHash){
+            // Means the current commit is an ancestor
+            if(hashToCheck == currentHash && position !=0){
                 return true
             }
             else{

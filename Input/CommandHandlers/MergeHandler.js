@@ -5,7 +5,7 @@ export default class MergeHandler{
     merge(command){
         hashOrBranchToMove = command.extractValueAfterWord("merge")
         
-        if(this.gitObject.isMergeFastForward(hashOrBranchToMove)){
+        if(this.gitObject.isCurrentCommitAnAncestorOf(hashOrBranchToMove)){
             return this.mergeFastForward(hashOrBranchToMove)
         }else{
             const message = command.extractValueFromFlag("-m")
