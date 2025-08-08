@@ -33,18 +33,41 @@ test("git branch 'newBranch'", ()=>{
     ).toThrow("fatal: a branch named 'dev' already exists")
 })
 
-test("git branch -d 'newBranch'", ()=>{
+test("git branch -d 'branchHeadOn'", ()=>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject)
-    cmdDisp.receiveAndDispatchCommand("git branch dev")
-    console.log(gitObject.getCurrentState())
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git branch -d main")
     ).toThrow("error: cannot delete branch 'main' used by worktree")
-    // console.log(this.gitObject.getGraph())
-    // cmdDisp.receiveAndDispatchCommand("git checkout dev")
-    // cmdDisp.receiveAndDispatchCommand("git commit")
-    // expect(
-    //     cmdDisp.receiveAndDispatchCommand("git branch -d dev")
-    // ).toBe()
+
+})
+
+test("git branch -d 'nonExistingBranch'", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git branch -d 2e3a3cc")
+    ).toThrow("error: branch '2e3a3cc' not found")
+
+})
+
+
+test("git branch -d 'existingBranch'", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    cmdDisp.receiveAndDispatchCommand("git branch dev")
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    cmdDisp.receiveAndDispatchCommand("git checkout dev")
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git branch -d main")
+    ).toThrow("error: The branch 'main' is not fully merged.\nIf you are sure you want to delete it, run 'git branch -D main'")
+    cmdDisp.receiveAndDispatchCommand("git checkout main")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch -d dev")
+    ).toBe()
+
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch")
+    ).toBe("* main")
+    
 })
