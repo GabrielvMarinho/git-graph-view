@@ -13,8 +13,8 @@ test("extracting value after word", () =>{
 
     command = new Command("git merge", ["merge"])
     expect(
-        () => command.extractValueAfterWord("merge")
-    ).toThrow("Value could not be found in command")
+        command.extractValueAfterWord("merge")
+    ).toBe(null)
 
     
 })

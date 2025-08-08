@@ -3,6 +3,15 @@ export default class BranchHandler{
         this.gitObject = gitObject
     }
     branch(command){
-        return this.gitObject.getAllBranchesString()
+        branchName = command.extractValueAfterWord("branch")
+
+        if(branchName){
+            return this.gitObject.createBranch(branchName)        
+        }
+        else{
+            return this.gitObject.getAllBranchesString()
+        }
+        
     }
+    
 }

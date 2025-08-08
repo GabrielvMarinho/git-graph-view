@@ -1,7 +1,6 @@
 import FlagRequiresValueException from "../Errors/flagRequiresValueException";
 import InvalidCommandException from "../Errors/InvalidCommandException";
 import stringArgv from 'string-argv';
-import ValueNotFoundInCommand from "../Errors/ValueNotFoundInCommand";
 
 export default class Command{
 
@@ -25,10 +24,10 @@ export default class Command{
                 index++
             }
 
-                throw new ValueNotFoundInCommand() 
+            return null
         }
         else{
-            throw new ValueNotFoundInCommand()
+            return null
         }
         
     }

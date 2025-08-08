@@ -18,3 +18,18 @@ test("git branch", ()=>{
         cmdDisp.receiveAndDispatchCommand("git branch")
     ).toBe(`* (HEAD detached at ${currentHash.slice(0, 7)})\n  main\n  dev`)
 })
+test("git branch 'newBranch'", ()=>{
+
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    cmdDisp.receiveAndDispatchCommand("git branch dev")
+    expect(
+        gitObject.getCurrentBranch().name
+    ).toBe("main")
+    expect(
+        gitObject.getAllBranchesString()
+    ).toBe("* main\n  dev")
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git branch dev")
+    ).toThrow("fatal: a branch named 'dev' already exists")
+})
