@@ -63,17 +63,43 @@ export default class GitObject{
             return false
         }
     }
-    isMergeFastForward(branchToMerge){
+    isSpecificCommitAnAncestorOfCurrentCommit(branchOrHash){
+        const graph = this.getGraph()
+        
+        var hashToCheck = branchOrHash
+        
+        var ancestors = [this.getCurrentHash()]
+        var position = 0
+        var currentHash = ancestors[position]
+        do{
+            
+            // Means the current commit is an ancestor
+            if(currentHash == hashToCheck){
+                return true
+            }
+            else{
+                for(let i = 0; i<graph[currentHash].parents.length; i++ ){
+                    ancestors.push(graph[currentHash].parents[i])
+                }
+            }
+            position++
+            currentHash = ancestors[position]
+
+        }while(hashToCheck)
+        
+        return false
+    }
+    isCurrentCommitAnAncestorOf(branchOrHash){
         const graph = this.getGraph()
         
         var currentHash = this.getCurrentHash()
         
-        var ancestors = [this.getHashFrom(branchToMerge)]
+        var ancestors = [this.getHashFrom(branchOrHash)]
         var position = 0
         var hashToCheck = ancestors[position]
         do{
             
-            // Means the current commit is an ancestor of the place to merge
+            // Means the current commit is an ancestor
             if(hashToCheck == currentHash){
                 return true
             }
@@ -85,7 +111,6 @@ export default class GitObject{
             position++
             hashToCheck = ancestors[position]
 
-            
         }while(hashToCheck)
         
         return false
