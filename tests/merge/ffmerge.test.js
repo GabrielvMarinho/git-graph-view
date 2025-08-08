@@ -62,8 +62,8 @@ test("fast forward merge in detached head to branch", ()=>{
     ).toBe(`Updating ${firstHash.slice(0, 7)}..${secondHash.slice(0, 7)}\nFast-forward`)
     
     expect(
-        () => gitObject.getCurrentBranch()
-    ).toThrow("Not in a branch currently")
+        gitObject.isHeadDetached()
+    ).toBe(true)
     expect(
         gitObject.getCurrentHash()
     ).toBe(secondHash)
@@ -83,8 +83,9 @@ test("fast forward merge in detached head to detached head", ()=>{
     ).toBe(`Updating ${firstHash.slice(0, 7)}..${secondHash.slice(0, 7)}\nFast-forward`)
 
     expect(
-        () => gitObject.getCurrentBranch()
-    ).toThrow("Not in a branch currently")
+        gitObject.isHeadDetached()
+    ).toBe(true)
+    
     expect(
         gitObject.getCurrentHash()
     ).toBe(secondHash)

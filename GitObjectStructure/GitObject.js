@@ -6,7 +6,6 @@ import BranchAlreadyExistException from "../Errors/BranchAlreadyExistException.j
 import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash.js";
 import { isValidBranchName } from "../utils.js";
 import NotValidBranchNameException from "../Errors/NotValidBranchNameException"
-import NotInABranchError from "../Errors/NotInABranchError.js";
 
 export default class GitObject{
     
@@ -32,26 +31,28 @@ export default class GitObject{
     
     getCurrentBranchAndHashString(){
         var position = this.head.currentPosition.slice(0, 7)
-        try{
-            var branch = this.getCurrentBranch()
-            if(branch && branch.name){
-                return `${position} ${branch.currentHash.slice(0, 7)}`
-            }
-        }catch(e){
+        
+        var branch = this.getCurrentBranch()
+        
+        if(branch){
+            return `${position} ${branch.currentHash.slice(0, 7)}`
+        }
+        else{
             return `detached HEAD ${position}`
         }
+        
+        
         
     }
     getGraph(){
         return this.graph
     }
     isHeadDetached(){
-        try{
-            this.getCurrentBranch()
-            return false
-        }catch(e){
+        var branch = this.getCurrentBranch()
+        if(!branch){
             return true
         }
+        return false
     }
     isBranch(branchOrHash){
         var branch = this.branches.find(branch => branch.name == branchOrHash)
@@ -97,7 +98,7 @@ export default class GitObject{
         if(branch){
             return branch
         }
-        throw new NotInABranchError()
+        return null
          
     }
     getCurrentHash(){
