@@ -41,7 +41,7 @@ export default class CheckoutHandler{
             }catch{
                 throw new InvalidReferenceForBranchCreationException(branch, positionToGo)
             }
-            this.gitObject.deleteBranch(branch)
+            this.gitObject.deleteBranch(branch, force=true)
             this.gitObject.createBranch(branch)
             this.gitObject.updateCurrentHashOrBranchPointer(branch)
         }

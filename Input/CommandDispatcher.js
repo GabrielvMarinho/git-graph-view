@@ -22,7 +22,12 @@ export default class CommandDispatcher{
     }
    
     branch(command){
-        return this.branchHandler.branch(command)
+        const flagFunctions = {
+            "-d": () => this.branchHandler.branchCheckDelete(command),
+            // "-D": () => this.branchHandler.checkoutResetCreateBranch(command),
+        }
+        const defaultFunction = () => this.branchHandler.branch(command)
+        return this.executeAllFlags(command, flagFunctions, defaultFunction)
     }
     checkout(command){
         const flagFunctions = {

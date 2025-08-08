@@ -1,3 +1,7 @@
+import BranchNotFound from "../../Errors/BranchNotFound"
+import BranchNotFullyMergedException from "../../Errors/BranchNotFullyMergedException"
+import NoBranchNorCommitHash from "../../Errors/NoBranchNorCommitHash"
+
 export default class BranchHandler{
     constructor(gitObject){
         this.gitObject = gitObject
@@ -13,5 +17,22 @@ export default class BranchHandler{
         }
         
     }
-    
+    branchCheckDelete(command){
+        branchToDelete = command.extractValueFromFlag("-d")
+        if(this.gitObject.isBranch(branchToDelete)){
+            if(this.gitObject.isSpecificCommitAnAncestorOfCurrentCommit(branchToDelete)){
+                
+                this.gitObject.deleteBranch(branchToDelete)
+                
+                return
+            }else{
+                throw new BranchNotFullyMergedException(branchToDelete)
+            }
+        }
+        else{
+            throw new BranchNotFound(branchToDelete)
+        }
+        
+
+    }
 }

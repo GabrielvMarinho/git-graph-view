@@ -6,6 +6,7 @@ import BranchAlreadyExistException from "../Errors/BranchAlreadyExistException.j
 import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash.js";
 import { isValidBranchName } from "../utils.js";
 import NotValidBranchNameException from "../Errors/NotValidBranchNameException"
+import CannotDeleteBranchUsedByWorktree from "../Errors/CannotDeleteBranchUsedByWorktree.js";
 
 export default class GitObject{
     
@@ -66,7 +67,7 @@ export default class GitObject{
     isSpecificCommitAnAncestorOfCurrentCommit(branchOrHash){
         const graph = this.getGraph()
         
-        var hashToCheck = branchOrHash
+        var hashToCheck = this.getHashFrom(branchOrHash)
         
         var ancestors = [this.getCurrentHash()]
         var position = 0
@@ -74,18 +75,19 @@ export default class GitObject{
         do{
             
             // Means the current commit is an ancestor
-            if(currentHash == hashToCheck && position !=0){
-                return true
+            if(currentHash == hashToCheck){
+                    return true
             }
             else{
                 for(let i = 0; i<graph[currentHash].parents.length; i++ ){
                     ancestors.push(graph[currentHash].parents[i])
                 }
+                
             }
             position++
             currentHash = ancestors[position]
 
-        }while(hashToCheck)
+        }while(currentHash)
         
         return false
     }
@@ -198,11 +200,16 @@ export default class GitObject{
         this.branches.push(newBranch)
         
     } 
-    deleteBranch(name){
-
-        var index = this.branches.findIndex(branchObj => branchObj.name == name)
-        if(index !== -1){
-            this.branches.splice(index, 1)
+    deleteBranch(name, force=false){
+        var branch = this.getCurrentBranch()
+        if((branch && branch.name != name) || force){
+            var index = this.branches.findIndex(branchObj => branchObj.name == name)
+            if(index !== -1){
+                this.branches.splice(index, 1)
+            }
+        }
+        else{
+            throw new CannotDeleteBranchUsedByWorktree(name)
         }
         
         

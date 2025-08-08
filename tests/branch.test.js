@@ -37,13 +37,14 @@ test("git branch -d 'newBranch'", ()=>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject)
     cmdDisp.receiveAndDispatchCommand("git branch dev")
+    console.log(gitObject.getCurrentState())
     expect(
-        gitObject.getCurrentBranch().name
-    ).toBe("main")
-    expect(
-        gitObject.getAllBranchesString()
-    ).toBe("* main\n  dev")
-    expect(
-        () => cmdDisp.receiveAndDispatchCommand("git branch dev")
-    ).toThrow("fatal: a branch named 'dev' already exists")
+        () => cmdDisp.receiveAndDispatchCommand("git branch -d main")
+    ).toThrow("error: cannot delete branch 'main' used by worktree")
+    // console.log(this.gitObject.getGraph())
+    // cmdDisp.receiveAndDispatchCommand("git checkout dev")
+    // cmdDisp.receiveAndDispatchCommand("git commit")
+    // expect(
+    //     cmdDisp.receiveAndDispatchCommand("git branch -d dev")
+    // ).toBe()
 })
