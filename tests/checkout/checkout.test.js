@@ -1,6 +1,6 @@
-import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash"
-import CommandDispatcher from "../Input/CommandDispatcher"
-import GitObject from "../GitObjectStructure/GitObject";
+import NoBranchNorCommitHash from "../../Errors/NoBranchNorCommitHash"
+import CommandDispatcher from "../../Input/CommandDispatcher"
+import GitObject from "../../GitObjectStructure/GitObject";
 
 test("git checkout 'branchOrHash'", () =>{
     const gitObject = new GitObject()

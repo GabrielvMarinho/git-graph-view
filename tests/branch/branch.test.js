@@ -1,5 +1,5 @@
-import GitObject from "../GitObjectStructure/GitObject"
-import CommandDispatcher from "../Input/CommandDispatcher"
+import GitObject from "../../GitObjectStructure/GitObject"
+import CommandDispatcher from "../../Input/CommandDispatcher"
 
 test("git branch", ()=>{
     const gitObject = new GitObject()
@@ -75,7 +75,6 @@ test("git branch -d 'existingBranch'", ()=>{
     
 })
 
-//---------------------------
 
 test("git branch -D 'branchHeadOn'", ()=>{
     const gitObject = new GitObject()
