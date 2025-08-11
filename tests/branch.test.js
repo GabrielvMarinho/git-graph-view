@@ -49,6 +49,9 @@ test("git branch -d 'nonExistingBranch'", ()=>{
         () => cmdDisp.receiveAndDispatchCommand("git branch -d 2e3a3cc")
     ).toThrow("error: branch '2e3a3cc' not found")
 
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git branch -d dev")
+    ).toThrow("error: branch 'dev' not found")
 })
 
 
@@ -71,3 +74,44 @@ test("git branch -d 'existingBranch'", ()=>{
     ).toBe("* main")
     
 })
+
+//---------------------------
+
+test("git branch -D 'branchHeadOn'", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git branch -D main")
+    ).toThrow("error: cannot delete branch 'main' used by worktree")
+
+})
+
+test("git branch -D 'nonExistingBranch'", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git branch -D 2e3a3cc")
+    ).toThrow("error: branch '2e3a3cc' not found")
+    
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git branch -D dev")
+    ).toThrow("error: branch 'dev' not found")
+})
+
+
+test("git branch -D 'existingBranch'", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    cmdDisp.receiveAndDispatchCommand("git branch dev")
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    cmdDisp.receiveAndDispatchCommand("git checkout dev")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch -D main")
+    ).toBe()
+    
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch")
+    ).toBe("* dev")
+    
+})
+

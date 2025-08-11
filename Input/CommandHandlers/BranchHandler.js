@@ -17,6 +17,15 @@ export default class BranchHandler{
         }
         
     }
+    branchDelete(command){
+        branchToDelete = command.extractValueFromFlag("-D")
+        if(this.gitObject.isBranch(branchToDelete)){
+            this.gitObject.deleteBranch(branchToDelete)
+        }
+        else{
+            throw new BranchNotFound(branchToDelete)
+        }
+    }
     branchCheckDelete(command){
         branchToDelete = command.extractValueFromFlag("-d")
         if(this.gitObject.isBranch(branchToDelete)){
@@ -32,7 +41,5 @@ export default class BranchHandler{
         else{
             throw new BranchNotFound(branchToDelete)
         }
-        
-
     }
 }

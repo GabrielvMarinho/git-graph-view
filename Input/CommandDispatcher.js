@@ -24,7 +24,7 @@ export default class CommandDispatcher{
     branch(command){
         const flagFunctions = {
             "-d": () => this.branchHandler.branchCheckDelete(command),
-            // "-D": () => this.branchHandler.checkoutResetCreateBranch(command),
+            "-D": () => this.branchHandler.branchDelete(command),
         }
         const defaultFunction = () => this.branchHandler.branch(command)
         return this.executeAllFlags(command, flagFunctions, defaultFunction)
@@ -54,13 +54,23 @@ export default class CommandDispatcher{
         return this.resetHandler.reset(command)
     }
 
-    executeAllFlags(command, flagFunctions, defaultFunction){
+    executeAllFlags(command, flagFunctions, defaultFunction, emptyStringReturn=false){
         for (const flag of command._arguments) {
             if (flagFunctions[flag]) {
-                return flagFunctions[flag]();  
+                const stringReturn =flagFunctions[flag]() 
+                if(emptyStringReturn){
+                    return null
+                }
+                return stringReturn  
             }
         }
-        return defaultFunction()
+        const stringReturn =defaultFunction() 
+
+        if(emptyStringReturn){
+            return null
+        }
+        return stringReturn
+        
     }
 
 

@@ -201,6 +201,7 @@ export default class GitObject{
         
     } 
     deleteBranch(name, force=false){
+        
         var branch = this.getCurrentBranch()
         if((branch && branch.name != name) || force){
             var index = this.branches.findIndex(branchObj => branchObj.name == name)
