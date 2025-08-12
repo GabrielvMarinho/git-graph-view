@@ -18,59 +18,49 @@ export default class CommandDispatcher{
     }
     receiveAndDispatchCommand(commandString){
         var command = new Command(commandString, this.validCommands)
-        return this[command.subcommand](command)
+        return this[command.subcommand](command, hideMessage=command.hasFlag("-q", "--quiet"))
     }
    
-    branch(command){
+    branch(command, hideMessage=false){
         const flagFunctions = {
-            "-d": () => this.branchHandler.branchCheckDelete(command),
-            "-D": () => this.branchHandler.branchDelete(command),
+            "-d": () => this.branchHandler.branchCheckDelete(command, hideMessage),
+            "-D": () => this.branchHandler.branchDelete(command, hideMessage),
         }
         const defaultFunction = () => this.branchHandler.branch(command)
         return this.executeAllFlags(command, flagFunctions, defaultFunction)
     }
-    checkout(command){
+    checkout(command, hideMessage=false){
         const flagFunctions = {
-            "-b": () => this.checkoutHandler.checkoutCreateBranch(command),
-            "-B": () => this.checkoutHandler.checkoutResetCreateBranch(command),
+            "-b": () => this.checkoutHandler.checkoutCreateBranch(command, hideMessage),
+            "-B": () => this.checkoutHandler.checkoutResetCreateBranch(command, hideMessage),
         }
-        const defaultFunction = () => this.checkoutHandler.checkout(command)
+        const defaultFunction = () => this.checkoutHandler.checkout(command, hideMessage)
         return this.executeAllFlags(command, flagFunctions, defaultFunction);
     }
-    merge(command){
+    merge(command, hideMessage=false){
         const flagFunctions = {
-            "--squash": () => this.mergeHandler.mergeSquash(command),
+            "--squash": () => this.mergeHandler.mergeSquash(command, hideMessage),
         }
         
-        const defaultFunction = () => this.mergeHandler.merge(command)
+        const defaultFunction = () => this.mergeHandler.merge(command, hideMessage)
 
         return this.executeAllFlags(command, flagFunctions, defaultFunction);
     }
-    commit(command){
-        return this.commitHandler.commit(command)
+    commit(command, hideMessage=false){
+        return this.commitHandler.commit(command, hideMessage)
     }
 
     reset(command){
         return this.resetHandler.reset(command)
     }
 
-    executeAllFlags(command, flagFunctions, defaultFunction, emptyStringReturn=false){
+    executeAllFlags(command, flagFunctions, defaultFunction){
         for (const flag of command._arguments) {
             if (flagFunctions[flag]) {
-                const stringReturn =flagFunctions[flag]() 
-                if(emptyStringReturn){
-                    return null
-                }
-                return stringReturn  
+                return flagFunctions[flag]()  
             }
-        }
-        const stringReturn =defaultFunction() 
-
-        if(emptyStringReturn){
-            return null
-        }
-        return stringReturn
-        
+        } 
+        return defaultFunction()
     }
 
 

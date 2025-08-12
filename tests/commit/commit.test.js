@@ -1,5 +1,5 @@
-import CommandDispatcher from "../Input/CommandDispatcher"
-import GitObject from "../GitObjectStructure/GitObject";
+import CommandDispatcher from "../../Input/CommandDispatcher"
+import GitObject from "../../GitObjectStructure/GitObject";
 
 test("git commit", () =>{
     const gitObject = new GitObject()

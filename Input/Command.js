@@ -31,6 +31,16 @@ export default class Command{
         }
         
     }
+    hasFlag(...flags){
+        let found = false
+        flags.forEach(flag =>{
+            const index = this._arguments.indexOf(flag);
+            if(index>=0){
+                found = true
+            }
+        })
+        return found
+    }
     extractValueFromFlag(flag){
         const index = this._arguments.indexOf(flag);
         if (index !== -1) {
@@ -45,13 +55,22 @@ export default class Command{
         }
         return null;
     }
-    extractSecondValueFromFlag(flag){
+    extractSecondValueFromFlag(flag) {
         const index = this._arguments.indexOf(flag);
-        if (index !== -1) {
-            value = this._arguments[index + 2] 
-
-            return value
+        if (index === -1) return null;
+        let i = index + 1;
+        while (i < this._arguments.length && this._arguments[i].startsWith('-')) {
+            i++;
         }
-        return null;
+        if (i >= this._arguments.length) return null;
+
+        i++; 
+        while (i < this._arguments.length && this._arguments[i].startsWith('-')) {
+            i++;
+        }
+        if (i >= this._arguments.length) return null;
+
+        return this._arguments[i];
     }
+
 }

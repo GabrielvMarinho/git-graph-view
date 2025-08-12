@@ -1,4 +1,6 @@
 import InvalidReferenceForBranchCreationException from "../../Errors/InvalidReferenceForBranchCreationException"
+import NotValidBranchNameException from "../../Errors/NotValidBranchNameException"
+import { isValidBranchName } from "../../utils"
 
 export default class CheckoutHandler{
 
@@ -6,15 +8,22 @@ export default class CheckoutHandler{
         this.gitObject = gitObject
     }
     
-    checkout(command){     
-        branchOrHash = command._arguments[command._arguments.length - 1]
-
+    checkout(command, hideMessage=false){     
+        branchOrHash = command.extractValueAfterWord("checkout")
+        let returnString
         this.gitObject.updateCurrentHashOrBranchPointer(branchOrHash)
         if(this.gitObject.isBranch(branchOrHash)){
-            return `Switched to branch '${branchOrHash}'`
+            returnString= `Switched to branch '${branchOrHash}'`
+        }else{
+            returnString= `Note: switching to ${branchOrHash}.\nYou are in 'detached HEAD' state`
         }
-        return `Note: switching to ${branchOrHash}.\nYou are in 'detached HEAD' state`
         
+        if(hideMessage){
+            return
+        }
+        else{
+            return returnString
+        }
 
     }
     checkoutCreateBranch(command){
@@ -25,14 +34,27 @@ export default class CheckoutHandler{
         }
         branch = command.extractValueFromFlag("-b")
 
-        positionToGo = command.extractSecondValueFromFlag("-b")
-        
+        positionToGo = command.extractValueAfterWord(branch)
+        let returnString
         if(positionToGo){
+            if(!isValidBranchName(positionToGo)){
+                throw new NotValidBranchNameException(positionToGo)
+            }
             steps(branch, positionToGo)
-            return `Switched to a new branch '${branch}'`
+            returnString = `Switched to a new branch '${branch}'`
+        }else{
+            steps(branch, this.gitObject.getCurrentHash())
         }
-        steps(branch, this.gitObject.getCurrentHash())
-        return `Switched to a new branch '${branch}'` 
+        
+        if(hideMessage){
+            return
+        }else{
+            if(!returnString){
+                returnString = `Switched to a new branch '${branch}'` 
+
+            }
+            return returnString
+        }
     }
     checkoutResetCreateBranch(command){
         const steps = (branch, positionToGo) =>{

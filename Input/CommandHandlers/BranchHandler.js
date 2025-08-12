@@ -6,7 +6,7 @@ export default class BranchHandler{
     constructor(gitObject){
         this.gitObject = gitObject
     }
-    branch(command){
+    branch(command, hideMessage=false){
         branchName = command.extractValueAfterWord("branch")
 
         if(branchName){
@@ -17,23 +17,31 @@ export default class BranchHandler{
         }
         
     }
-    branchDelete(command){
+    branchDelete(command, hideMessage=false){
         branchToDelete = command.extractValueFromFlag("-D")
         if(this.gitObject.isBranch(branchToDelete)){
+            let hash = this.gitObject.getHashFrom(branchToDelete)
             this.gitObject.deleteBranch(branchToDelete)
+            if(hideMessage){
+                return
+            }
+            return `Deleted branch ${branchToDelete} (was ${hash.slice(0, 7)})`
         }
         else{
             throw new BranchNotFound(branchToDelete)
         }
     }
-    branchCheckDelete(command){
+    branchCheckDelete(command, hideMessage=false){
         branchToDelete = command.extractValueFromFlag("-d")
         if(this.gitObject.isBranch(branchToDelete)){
             if(this.gitObject.isSpecificCommitAnAncestorOfCurrentCommit(branchToDelete)){
-                
+                let hash = this.gitObject.getHashFrom(branchToDelete)
+
                 this.gitObject.deleteBranch(branchToDelete)
-                
-                return
+                if(hideMessage){
+                    return
+                }
+                return `Deleted branch ${branchToDelete} (was ${hash.slice(0, 7)})`
             }else{
                 throw new BranchNotFullyMergedException(branchToDelete)
             }

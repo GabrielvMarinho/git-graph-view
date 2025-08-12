@@ -61,13 +61,15 @@ test("git branch -d 'existingBranch'", ()=>{
     cmdDisp.receiveAndDispatchCommand("git branch dev")
     cmdDisp.receiveAndDispatchCommand("git commit")
     cmdDisp.receiveAndDispatchCommand("git checkout dev")
+    const devHash = gitObject.getCurrentHash()
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git branch -d main")
     ).toThrow("error: The branch 'main' is not fully merged.\nIf you are sure you want to delete it, run 'git branch -D main'")
     cmdDisp.receiveAndDispatchCommand("git checkout main")
+    
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch -d dev")
-    ).toBe()
+    ).toBe(`Deleted branch dev (was ${devHash.slice(0, 7)})`)
 
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")
@@ -101,12 +103,14 @@ test("git branch -D 'nonExistingBranch'", ()=>{
 test("git branch -D 'existingBranch'", ()=>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject)
+
     cmdDisp.receiveAndDispatchCommand("git branch dev")
     cmdDisp.receiveAndDispatchCommand("git commit")
+    const mainHash = gitObject.getCurrentHash()
     cmdDisp.receiveAndDispatchCommand("git checkout dev")
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch -D main")
-    ).toBe()
+    ).toBe(`Deleted branch main (was ${mainHash.slice(0, 7)})`)
     
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")

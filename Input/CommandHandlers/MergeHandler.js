@@ -2,15 +2,19 @@ export default class MergeHandler{
     constructor(gitObject){
         this.gitObject = gitObject
     }
-    merge(command){
+    merge(command, hideMessage=false){
         hashOrBranchToMove = command.extractValueAfterWord("merge")
-        
+        let returnString
         if(this.gitObject.isCurrentCommitAnAncestorOf(hashOrBranchToMove)){
-            return this.mergeFastForward(hashOrBranchToMove)
+            returnString = this.mergeFastForward(hashOrBranchToMove)
         }else{
             const message = command.extractValueFromFlag("-m")
-            
-            return this.normalMerge(hashOrBranchToMove, message)
+            returnString = this.normalMerge(hashOrBranchToMove, message)
+        }
+        if(hideMessage){
+            return
+        }else{
+            return returnString
         }
     }
     normalMerge(hashOrBranchToMove, message){
@@ -47,15 +51,21 @@ export default class MergeHandler{
         this.gitObject.updateCurrentHashOrBranchPointerToHash(hashToMerged)
         return `Updating ${currentHash.slice(0, 7)}..${hashToMerged.slice(0, 7)}\nFast-forward`
     }
-    mergeSquash(command){
+    mergeSquash(command, hideMessage=false){
         this.gitObject.createCommit("Squash merge")
+        let returnString
         if(this.gitObject.isHeadDetached){
             var message = this.gitObject.getCurrentBranchAndHashString()
-            return `[${message}] Squash merge commit`
+            returnString = `[${message}] Squash merge commit`
         }
         else{
             var message = this.gitObject.getCurrentBranchAndHashString()
-            return `[${message}] Squash merge commit`
+            returnString = `[${message}] Squash merge commit`
+        }
+        if(hideMessage){
+            return 
+        }else{
+            return returnString
         }
         
         

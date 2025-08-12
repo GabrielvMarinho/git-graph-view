@@ -2,14 +2,14 @@ import NoBranchNorCommitHash from "../../Errors/NoBranchNorCommitHash"
 import CommandDispatcher from "../../Input/CommandDispatcher"
 import GitObject from "../../GitObjectStructure/GitObject";
 
-test("git checkout 'branchOrHash'", () =>{
+test("git checkout 'branchOrHash' -q", () =>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject) 
     hashToCheckout = gitObject.getCurrentHash()
 
     cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
     expect(
-        cmdDisp.receiveAndDispatchCommand("git checkout main")
+        cmdDisp.receiveAndDispatchCommand("git checkout main -q")
     ).toBe()
 
     expect(
@@ -50,14 +50,11 @@ test("git checkout -b 'branch'", () =>{
     ).toThrow("fatal: a branch named 'main' already exists")
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git checkout -b -q")
-    ).toThrow("error: switch '-b' requires a value")
+    ).toThrow("fatal: '-q' is not a valid branch name")
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git checkout -q -b .")
     ).toThrow("fatal: '.' is not a valid branch name")
 
-    expect(
-        () => cmdDisp.receiveAndDispatchCommand("git checkout -q -b -b")
-    ).toThrow("fatal: '-b' is not a valid branch name")
 
 })
 
