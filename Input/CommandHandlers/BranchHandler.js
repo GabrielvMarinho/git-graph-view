@@ -18,7 +18,7 @@ export default class BranchHandler{
         
     }
     branchDelete(command, hideMessage=false){
-        branchToDelete = command.extractValueFromFlag("-D")
+        branchToDelete = command.extractValueFromFlag("-D") || command.extractValueAfterWord("--delete") 
         if(this.gitObject.isBranch(branchToDelete)){
             let hash = this.gitObject.getHashFrom(branchToDelete)
             this.gitObject.deleteBranch(branchToDelete)
@@ -31,24 +31,32 @@ export default class BranchHandler{
             throw new BranchNotFound(branchToDelete)
         }
     }
+    
     branchCheckDelete(command, hideMessage=false){
+        let returnString
+        if(command.hasFlag("--force")){
+            returnString= this.branchDelete(command, hideMessage)
+        }
         branchToDelete = command.extractValueFromFlag("-d") || command.extractValueFromFlag("--delete") 
-        
+                
         if(this.gitObject.isBranch(branchToDelete)){
             if(this.gitObject.isSpecificCommitAnAncestorOfCurrentCommit(branchToDelete)){
                 let hash = this.gitObject.getHashFrom(branchToDelete)
 
                 this.gitObject.deleteBranch(branchToDelete)
-                if(hideMessage){
-                    return
-                }
-                return `Deleted branch ${branchToDelete} (was ${hash.slice(0, 7)})`
+                
+                returnString= `Deleted branch ${branchToDelete} (was ${hash.slice(0, 7)})`
             }else{
                 throw new BranchNotFullyMergedException(branchToDelete)
             }
         }
         else{
             throw new BranchNotFound(branchToDelete)
+        }
+        if(hideMessage){
+            return
+        }else{
+            return returnString
         }
     }
 }

@@ -91,7 +91,7 @@ test("git branch -D 'nonExistingBranch'", ()=>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject)
     expect(
-        () => cmdDisp.receiveAndDispatchCommand("git branch -D 2e3a3cc")
+        () => cmdDisp.receiveAndDispatchCommand("git branch --delete --force 2e3a3cc")
     ).toThrow("error: branch '2e3a3cc' not found")
     
     expect(

@@ -31,6 +31,7 @@ export default class Command{
         }
         
     }
+    
     hasFlag(...flags){
         let found = false
         flags.forEach(flag =>{
