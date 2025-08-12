@@ -30,7 +30,7 @@ test("normal merge in branch to branch -q", () =>{
     const mainHash = gitObject.getCurrentHash()
 
     expect(
-        cmdDisp.receiveAndDispatchCommand("git merge dev -q")    
+        cmdDisp.receiveAndDispatchCommand("git merge dev --quiet")    
     ).toBe()
 })
 

@@ -30,7 +30,7 @@ test("git checkout -b 'branch'", () =>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject) 
     expect(
-        cmdDisp.receiveAndDispatchCommand("git checkout -b dev -q")
+        cmdDisp.receiveAndDispatchCommand("git checkout -b dev --quiet")
     ).toBe()
     expect(
         gitObject.getCurrentState()["head"].currentPosition
@@ -52,7 +52,7 @@ test("git checkout -b 'branch'", () =>{
         () => cmdDisp.receiveAndDispatchCommand("git checkout -b -q")
     ).toThrow("fatal: '-q' is not a valid branch name")
     expect(
-        () => cmdDisp.receiveAndDispatchCommand("git checkout -q -b .")
+        () => cmdDisp.receiveAndDispatchCommand("git checkout --quiet -b .")
     ).toThrow("fatal: '.' is not a valid branch name")
 
 

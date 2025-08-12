@@ -22,7 +22,7 @@ test("git branch -d 'existingBranch'", ()=>{
     cmdDisp.receiveAndDispatchCommand("git checkout main")
     
     expect(
-        cmdDisp.receiveAndDispatchCommand("git branch -d dev -q")
+        cmdDisp.receiveAndDispatchCommand("git branch -d dev --quiet")
     ).toBe()
     
 })
