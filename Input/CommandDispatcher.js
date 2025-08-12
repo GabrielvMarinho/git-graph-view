@@ -24,6 +24,7 @@ export default class CommandDispatcher{
     branch(command, hideMessage=false){
         const flagFunctions = {
             "-d": () => this.branchHandler.branchCheckDelete(command, hideMessage),
+            "--delete": () => this.branchHandler.branchCheckDelete(command, hideMessage),
             "-D": () => this.branchHandler.branchDelete(command, hideMessage),
         }
         const defaultFunction = () => this.branchHandler.branch(command)

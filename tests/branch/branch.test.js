@@ -37,7 +37,7 @@ test("git branch -d 'branchHeadOn'", ()=>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject)
     expect(
-        () => cmdDisp.receiveAndDispatchCommand("git branch -d main")
+        () => cmdDisp.receiveAndDispatchCommand("git branch --delete main")
     ).toThrow("error: cannot delete branch 'main' used by worktree")
 
 })
@@ -68,7 +68,7 @@ test("git branch -d 'existingBranch'", ()=>{
     cmdDisp.receiveAndDispatchCommand("git checkout main")
     
     expect(
-        cmdDisp.receiveAndDispatchCommand("git branch -d dev")
+        cmdDisp.receiveAndDispatchCommand("git branch --delete dev")
     ).toBe(`Deleted branch dev (was ${devHash.slice(0, 7)})`)
 
     expect(

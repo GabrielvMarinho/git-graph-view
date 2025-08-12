@@ -32,7 +32,8 @@ export default class BranchHandler{
         }
     }
     branchCheckDelete(command, hideMessage=false){
-        branchToDelete = command.extractValueFromFlag("-d")
+        branchToDelete = command.extractValueFromFlag("-d") || command.extractValueFromFlag("--delete") 
+        
         if(this.gitObject.isBranch(branchToDelete)){
             if(this.gitObject.isSpecificCommitAnAncestorOfCurrentCommit(branchToDelete)){
                 let hash = this.gitObject.getHashFrom(branchToDelete)
