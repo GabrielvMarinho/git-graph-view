@@ -7,6 +7,8 @@ import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash.js";
 import { isValidBranchName } from "../utils.js";
 import NotValidBranchNameException from "../Errors/NotValidBranchNameException"
 import CannotDeleteBranchUsedByWorktree from "../Errors/CannotDeleteBranchUsedByWorktree.js";
+import BranchNotFound from "../Errors/BranchNotFound.js";
+import NoBranchNamed from "../Errors/NoBranchNamed.js";
 
 export default class GitObject{
     
@@ -54,6 +56,15 @@ export default class GitObject{
             return true
         }
         return false
+    }
+    getBranch(branchName){
+        var branch = this.branches.find(branch => branch.name == branchName)
+        if(branch != null){
+            return branch
+        }
+        else{
+            return null
+        }
     }
     isBranch(branchOrHash){
         var branch = this.branches.find(branch => branch.name == branchOrHash)
@@ -188,6 +199,42 @@ export default class GitObject{
     branchAlreadyExist(name){
         return Object.values(this.branches).some(branchObj => branchObj.name == name)
     }
+    renameBranch(branchName, newName){
+        if(!isValidBranchName(branchName)){
+            throw new NotValidBranchNameException(branchName);
+        }
+        if(newName){
+            if(!this.branchAlreadyExist(branchName)){
+                throw new NoBranchNamed(branchName);
+            }
+            if(!isValidBranchName(newName)){
+                throw new NotValidBranchNameException(newName);
+            }
+            if(this.branchAlreadyExist(newName)){
+                throw new BranchAlreadyExistException(newName)
+            }
+            
+            let branchToChange = this.getBranch(branchName)
+            
+            if(branchName ==this.getCurrentBranch().name){
+                branchToChange.name = newName
+                this.updateCurrentHashOrBranchPointer(newName)
+            }else{
+                branchToChange.name = newName
+            }
+        }
+        else{
+            if(this.branchAlreadyExist(branchName)){
+                throw new BranchAlreadyExistException(branchName)
+            }else{
+                let currentBranch = this.getCurrentBranch()
+                currentBranch.name = branchName
+                this.updateCurrentHashOrBranchPointer(branchName)
+            }
+        }
+        return
+        
+    } 
     createBranch(name){
         if(!isValidBranchName(name)){
             throw new NotValidBranchNameException(name);

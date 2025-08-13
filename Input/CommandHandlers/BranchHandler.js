@@ -17,6 +17,11 @@ export default class BranchHandler{
         }
         
     }
+    renameBranch(command){
+        let firstValue = command.extractValueFromFlag("-m") || command.extractValueFromFlag("--move") 
+        let secondValue = command.extractValueAfterWord(firstValue)
+        this.gitObject.renameBranch(firstValue, secondValue)
+    }
     branchDelete(command, hideMessage=false){
         branchToDelete = command.extractValueFromFlag("-D") || command.extractValueAfterWord("--delete") 
         if(this.gitObject.isBranch(branchToDelete)){

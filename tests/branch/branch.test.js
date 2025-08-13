@@ -118,3 +118,33 @@ test("git branch -D 'existingBranch'", ()=>{
     
 })
 
+test("git branch -m 'branch'", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
+    cmdDisp.receiveAndDispatchCommand("git branch -m main newmainname")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch")
+    ).toBe("  newmainname\n* dev")
+    expect(
+        () =>cmdDisp.receiveAndDispatchCommand("git branch -m newmainname //incorrectname")
+    ).toThrow("fatal: '//incorrectname' is not a valid branch name")
+    expect(
+        () =>cmdDisp.receiveAndDispatchCommand("git branch -m nonexistant newname")
+    ).toThrow("fatal: no branch named 'nonexistant'")
+    expect(
+        () =>cmdDisp.receiveAndDispatchCommand("git branch -m newmainname dev")
+    ).toThrow("fatal: a branch named 'dev' already exists")
+    cmdDisp.receiveAndDispatchCommand("git branch --move newdevname")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch")
+    ).toBe("  newmainname\n* newdevname")
+
+    cmdDisp.receiveAndDispatchCommand("git branch --move newdevname newestdevname")
+
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch")
+    ).toBe("  newmainname\n* newestdevname")
+
+})
+
