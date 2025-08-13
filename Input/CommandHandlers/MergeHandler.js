@@ -3,12 +3,12 @@ export default class MergeHandler{
         this.gitObject = gitObject
     }
     merge(command, hideMessage=false){
-        hashOrBranchToMove = command.extractValueAfterWord("merge")
+        hashOrBranchToMove = command.extractValueAfterOneWordIgnoringDash("merge")
         let returnString
         if(this.gitObject.isCurrentCommitAnAncestorOf(hashOrBranchToMove)){
             returnString = this.mergeFastForward(hashOrBranchToMove)
         }else{
-            const message = command.extractValueFromFlag("-m")
+            const message = command.extractValueAfterFlag("-m")
             returnString = this.normalMerge(hashOrBranchToMove, message)
         }
         if(hideMessage){

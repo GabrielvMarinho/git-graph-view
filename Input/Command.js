@@ -14,35 +14,9 @@ export default class Command{
             throw new InvalidCommandException()
         }
     }
-    extractValueAfterWord(word){
-        var index = this._arguments.indexOf(word)
-        if(this._arguments[index]){
-            while(index < this._arguments.length){
-                if(!this._arguments[index].startsWith("-") && this._arguments[index] != word){
-                    return this._arguments[index]
-                }
-                index++
-            }
 
-            return null
-        }
-        else{
-            return null
-        }
+    extractValueAfterFlag(flag){
         
-    }
-    
-    hasFlag(...flags){
-        let found = false
-        flags.forEach(flag =>{
-            const index = this._arguments.indexOf(flag);
-            if(index>=0){
-                found = true
-            }
-        })
-        return found
-    }
-    extractValueFromFlag(flag){
         const index = this._arguments.indexOf(flag);
         if (index !== -1) {
             value = this._arguments[index + 1] 
@@ -56,8 +30,19 @@ export default class Command{
         }
         return null;
     }
-    extractSecondValueFromFlag(flag) {
-        const index = this._arguments.indexOf(flag);
+
+    extractValueAfterOneWordIgnoringDash(word){
+        const index = this._arguments.indexOf(word);
+        if (index === -1) return null;
+        let i = index + 1;
+        while (i < this._arguments.length && this._arguments[i].startsWith('-')) {
+            i++;
+        }
+        if (i >= this._arguments.length) return null;
+        return this._arguments[i];
+    }
+    extractValueAfterTwoWordsIgnoringDash(word){
+        const index = this._arguments.indexOf(word);
         if (index === -1) return null;
         let i = index + 1;
         while (i < this._arguments.length && this._arguments[i].startsWith('-')) {
@@ -72,6 +57,17 @@ export default class Command{
         if (i >= this._arguments.length) return null;
 
         return this._arguments[i];
+    }
+    
+    hasFlag(...flags){
+        let found = false
+        flags.forEach(flag =>{
+            const index = this._arguments.indexOf(flag);
+            if(index>=0){
+                found = true
+            }
+        })
+        return found
     }
 
 }

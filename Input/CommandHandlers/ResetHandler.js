@@ -3,7 +3,7 @@ export default class ResetHandler{
         this.gitObject = gitObject
     }
     reset(command){
-        hashToReset = this.gitObject.getHashFrom(command.extractValueAfterWord("reset"))
+        hashToReset = this.gitObject.getHashFrom(command.extractValueAfterOneWordIgnoringDash("reset"))
         this.gitObject.updateCurrentHashOrBranchPointerToHash(hashToReset)
     }
 }

@@ -9,7 +9,7 @@ export default class CheckoutHandler{
     }
     
     checkout(command, hideMessage=false){     
-        branchOrHash = command.extractValueAfterWord("checkout")
+        branchOrHash = command.extractValueAfterOneWordIgnoringDash("checkout")
         let returnString
         this.gitObject.updateCurrentHashOrBranchPointer(branchOrHash)
         if(this.gitObject.isBranch(branchOrHash)){
@@ -32,9 +32,9 @@ export default class CheckoutHandler{
             this.gitObject.createBranch(branch)
             this.gitObject.updateCurrentHashOrBranchPointer(branch)
         }
-        branch = command.extractValueFromFlag("-b")
+        branch = command.extractValueAfterFlag("-b")
 
-        positionToGo = command.extractValueAfterWord(branch)
+        positionToGo = command.extractValueAfterOneWordIgnoringDash(branch)
         let returnString
         if(positionToGo){
             if(!isValidBranchName(positionToGo)){
@@ -67,9 +67,9 @@ export default class CheckoutHandler{
             this.gitObject.createBranch(branch)
             this.gitObject.updateCurrentHashOrBranchPointer(branch)
         }
-        branch = command.extractValueFromFlag("-B")
+        branch = command.extractValueAfterFlag("-B")
 
-        positionToGo = command.extractSecondValueFromFlag("-B")
+        positionToGo = command.extractValueAfterTwoWordsIgnoringDash("-B")
         
         if(positionToGo){
             steps(branch, positionToGo)
