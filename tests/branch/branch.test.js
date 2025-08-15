@@ -10,13 +10,13 @@ test("git branch", ()=>{
     cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")
-    ).toBe("  main\n* dev")
+    ).toBe("* dev\n  main")
     const currentHash = gitObject.getCurrentHash()
     cmdDisp.receiveAndDispatchCommand(`git checkout ${currentHash.slice(0, 7)}`)
 
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")
-    ).toBe(`* (HEAD detached at ${currentHash.slice(0, 7)})\n  main\n  dev`)
+    ).toBe(`* (HEAD detached at ${currentHash.slice(0, 7)})\n  dev\n  main`)
 })
 test("git branch 'newBranch'", ()=>{
     const gitObject = new GitObject()
@@ -27,7 +27,7 @@ test("git branch 'newBranch'", ()=>{
     ).toBe("main")
     expect(
         gitObject.getAllBranchesString()
-    ).toBe("* main\n  dev")
+    ).toBe("  dev\n* main")
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git branch dev")
     ).toThrow("fatal: a branch named 'dev' already exists")
@@ -125,7 +125,7 @@ test("git branch -m 'branch'", ()=>{
     cmdDisp.receiveAndDispatchCommand("git branch -m main newmainname")
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")
-    ).toBe("  newmainname\n* dev")
+    ).toBe("* dev\n  newmainname")
     expect(
         () =>cmdDisp.receiveAndDispatchCommand("git branch -m newmainname //incorrectname")
     ).toThrow("fatal: '//incorrectname' is not a valid branch name")
@@ -138,13 +138,13 @@ test("git branch -m 'branch'", ()=>{
     cmdDisp.receiveAndDispatchCommand("git branch --move newdevname")
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")
-    ).toBe("  newmainname\n* newdevname")
+    ).toBe("* newdevname\n  newmainname")
 
     cmdDisp.receiveAndDispatchCommand("git branch --move newdevname newestdevname")
 
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")
-    ).toBe("  newmainname\n* newestdevname")
+    ).toBe("* newestdevname\n  newmainname")
 
 })
 

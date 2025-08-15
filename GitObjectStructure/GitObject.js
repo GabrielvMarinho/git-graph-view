@@ -279,13 +279,20 @@ export default class GitObject{
         this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
         return newCommitSha
     }
-
+    getAlphabeticalOrderedBranchArray(){
+        return this.branches.sort((a, b) =>{
+            aName = a.getName()
+            bName = b.getName()
+            return aName>bName ? 1 : aName<bName ? -1 : 0
+        })
+    }
     getAllBranchesString(){
         branchesString = ""
         if(this.isHeadDetached()){
             branchesString = `* (HEAD detached at ${this.getCurrentHash().slice(0, 7)})\n`
         }
-        this.branches.forEach(branch =>{
+        const alphabeticalOrderedArray = this.getAlphabeticalOrderedBranchArray()
+        alphabeticalOrderedArray.forEach(branch =>{
             if(this.getCurrentBranch() == branch){
                 branchesString = branchesString+"* "
             }
