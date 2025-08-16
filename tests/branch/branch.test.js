@@ -148,3 +148,41 @@ test("git branch -m 'branch'", ()=>{
 
 })
 
+
+
+test("git branch -M 'branch'", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)
+    cmdDisp.receiveAndDispatchCommand("git checkout -b dev")
+    cmdDisp.receiveAndDispatchCommand("git branch -m main newmainname")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch")
+    ).toBe("* dev\n  newmainname")
+    expect(
+        () =>cmdDisp.receiveAndDispatchCommand("git branch -M newmainname //incorrectname")
+    ).toThrow("fatal: '//incorrectname' is not a valid branch name")
+    expect(
+        () =>cmdDisp.receiveAndDispatchCommand("git branch -M nonexistant newname")
+    ).toThrow("fatal: no branch named 'nonexistant'")
+    
+    expect(
+        () => cmdDisp.receiveAndDispatchCommand("git branch -M newmainname dev")
+    ).toThrow("error: cannot delete branch 'dev' used by worktree")
+    
+    const newDevNameHash = this.gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git branch -M dev")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch")
+    ).toBe("* dev")
+    expect(
+        this.gitObject().getCurrentHash()
+    ).toBe(newDevNameHash)
+
+
+    cmdDisp.receiveAndDispatchCommand("git branch main")
+    cmdDisp.receiveAndDispatchCommand("git branch feature")
+    cmdDisp.receiveAndDispatchCommand("git branch --move --force main feature")
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git branch")
+    ).toBe("* dev\n  feature")
+})
