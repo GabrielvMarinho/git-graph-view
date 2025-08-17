@@ -28,6 +28,7 @@ export default class CommandDispatcher{
             "-D": () => this.branchHandler.branchDelete(command, hideMessage),
             "-m": () => this.branchHandler.renameBranch(command),
             "--move": () => this.branchHandler.renameBranch(command),
+            "-M": () => this.branchHandler.renameBranchDelete(command),
 
         }
         const defaultFunction = () => this.branchHandler.branch(command)

@@ -1,3 +1,4 @@
+import { setUncaughtExceptionCaptureCallback } from "process"
 import BranchNotFound from "../../Errors/BranchNotFound"
 import BranchNotFullyMergedException from "../../Errors/BranchNotFullyMergedException"
 import NoBranchNorCommitHash from "../../Errors/NoBranchNorCommitHash"
@@ -17,7 +18,22 @@ export default class BranchHandler{
         }
         
     }
+    renameBranchDelete(command){
+        let firstValue = command.extractValueAfterFlag("-M") || command.extractValueAfterOneWordIgnoringDash("--force") 
+        let secondValue = command.extractValueAfterOneWordIgnoringDash(firstValue)
+        
+        if(secondValue){
+            this.gitObject.deleteBranch(secondValue)
+        }else{
+            this.gitObject.deleteBranch(firstValue)
+        }
+        this.gitObject.renameBranch(firstValue, secondValue)
+    }
     renameBranch(command){
+        if(command.hasFlag("--force")){
+            this.renameBranchDelete(command)
+            return
+        }
         let firstValue = command.extractValueAfterFlag("-m") || command.extractValueAfterFlag("--move") 
         let secondValue = command.extractValueAfterOneWordIgnoringDash(firstValue)
         this.gitObject.renameBranch(firstValue, secondValue)

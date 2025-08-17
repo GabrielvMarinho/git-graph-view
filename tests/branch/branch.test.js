@@ -148,8 +148,6 @@ test("git branch -m 'branch'", ()=>{
 
 })
 
-
-
 test("git branch -M 'branch'", ()=>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject)
@@ -169,20 +167,19 @@ test("git branch -M 'branch'", ()=>{
         () => cmdDisp.receiveAndDispatchCommand("git branch -M newmainname dev")
     ).toThrow("error: cannot delete branch 'dev' used by worktree")
     
-    const newDevNameHash = this.gitObject.getCurrentHash()
-    cmdDisp.receiveAndDispatchCommand("git branch -M dev")
+    const devHash = gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git branch -M newmainname")
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")
-    ).toBe("* dev")
+    ).toBe("* newmainname")
     expect(
-        this.gitObject().getCurrentHash()
-    ).toBe(newDevNameHash)
-
+        gitObject.getCurrentHash()
+    ).toBe(devHash)
 
     cmdDisp.receiveAndDispatchCommand("git branch main")
     cmdDisp.receiveAndDispatchCommand("git branch feature")
     cmdDisp.receiveAndDispatchCommand("git branch --move --force main feature")
     expect(
         cmdDisp.receiveAndDispatchCommand("git branch")
-    ).toBe("* dev\n  feature")
+    ).toBe("  feature\n* newmainname")
 })
