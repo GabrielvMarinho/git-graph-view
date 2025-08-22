@@ -1,5 +1,7 @@
-
+import CommandPrompt from "./components/CommandPrompt.js";
+import "./styles.css"
 export default function App() {
-  console.log("hello world")
-  return <div>Hello, world!</div>;
+  return (
+    <CommandPrompt></CommandPrompt>
+  );
 };

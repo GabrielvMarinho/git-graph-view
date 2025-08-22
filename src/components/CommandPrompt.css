@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+.commandPrompt{
+    width: 400px;
+    color: white;
+}
+.cmdArrowInput{
+    background-color: transparent;
+    color: white;
+    outline: 0;
+    border: 0;
+    font-family: "Ubuntu Mono", monospace;
+}
+.cmdArrow{
+    font-family: "Ubuntu Mono", monospace;
+
+}
+.dispatchCommand{
+    display: flex;
+    gap: 2px;
+}
