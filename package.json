@@ -15,12 +15,14 @@
   },
   "type": "module",
   "dependencies": {
+    "@xyflow/react": "^12.8.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "reactflow": "^11.11.4",
     "string-argv": "^0.3.2"
   },
-  "scripts":{
-    "start":"webpack serve --mode development",
+  "scripts": {
+    "start": "webpack serve --mode development",
     "build": "webpack --mode production"
   }
 }
