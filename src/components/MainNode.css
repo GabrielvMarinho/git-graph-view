@@ -1,0 +1,10 @@
+.mainNodeHandler{
+    opacity: 0;
+}
+.mainNode{
+    width:50px;
+    height:50px;
+    border-radius:100%;
+    background-color:#11bb11;
+    box-shadow: 0px 0px 30px 2px #008800;
+}

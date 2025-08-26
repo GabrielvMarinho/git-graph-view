@@ -1,6 +1,7 @@
 import { ReactFlow, Controls, Background, useNodesState, useEdgesState, ReactFlowProvider, addEdge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useEffect } from 'react';
+import MainNode from "./MainNode.js"
 export default function GitGraph(){
     const [nodes, setNodes, onChangeNodes] = useNodesState([]);
     const [edges, setEdges, onChangeEdges] = useEdgesState([]);
@@ -13,7 +14,7 @@ export default function GitGraph(){
             id: `${nds.length + 1}`,
             position: { x: 100 + nds.length, y: 100 + nds.length * 100 },
             data: { label: `Node ${nds.length + 1}` },
-            type: 'default',
+            type: 'mainNode',
         },
         ]);
     };
@@ -25,6 +26,9 @@ export default function GitGraph(){
         setEdges(addEdge({source:"1", target:"2"}, edges))
 
     }, [])
+    const nodeTypes = {
+    	mainNode:MainNode
+    }
     console.log(edges)
     return (
         <div style={{
@@ -48,6 +52,7 @@ export default function GitGraph(){
             </button>
             <ReactFlow
             nodes={nodes}
+	    nodeTypes={nodeTypes}
             edges={edges}
             onNodesChange={onChangeNodes}
             onEdgesChange={onChangeEdges}
