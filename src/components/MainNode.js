@@ -3,8 +3,8 @@ import "./MainNode.css";
 export default function MainNode(){
     return(
         <div className={"mainNode"}>
-            <Handle className={"mainNodeHandler"} type="target" position={"right"}/>
-            <Handle className={"mainNodeHandler"} type="source" position={"left"}/>
+            <Handle isConnectable={false} className={"mainNodeHandler"} type="target" position={"right"}/>
+            <Handle isConnectable={false} className={"mainNodeHandler"} type="source" position={"left"}/>
         </div>
     )
 }
