@@ -1,27 +1,15 @@
-import { ReactFlow, Controls, Background, useNodesState, useEdgesState, ReactFlowProvider, addEdge } from '@xyflow/react';
+import { ReactFlow, Controls, Background, useNodesState, useEdgesState, ReactFlowProvider, addEdge, Position } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useEffect } from 'react';
 import MainNode from "./MainNode.js"
-export default function GitGraph(){
+export default function GitGraph({graph}){
+    
     const [nodes, setNodes, onChangeNodes] = useNodesState([]);
     const [edges, setEdges, onChangeEdges] = useEdgesState([]);
     const onConnect = (params) => {console.log(params);setEdges((eds) => addEdge(params, eds))};
-    
-    const handleAddNode = () => {
-        setNodes((nds) => [
-        ...nds,
-        {
-            id: `${nds.length + 1}`,
-            position: { x: 100 + nds.length, y: 100 + nds.length * 100 },
-            data: { label: `Node ${nds.length + 1}` },
-            type: 'mainNode',
-        },
-        ]);
-    };
 
     useEffect(() =>{
-        handleAddNode()
-        handleAddNode()
+        setNodes((nodes) => [...nodes, {id:"1", position:{ x: 100, y: 100 }, type:"mainNode"}])
 
         setEdges(addEdge({source:"1", target:"2"}, edges))
 
@@ -29,7 +17,6 @@ export default function GitGraph(){
     const nodeTypes = {
     	mainNode:MainNode
     }
-    console.log(edges)
     return (
         <div style={{
         width: "100vw",

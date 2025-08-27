@@ -1,5 +1,4 @@
 import Commit from "./Commit.js";
-import crypto from "crypto"
 import Head from "./Head.js";
 import Branch from "./Branch.js";
 import BranchAlreadyExistException from "../Errors/BranchAlreadyExistException.js";
@@ -7,7 +6,6 @@ import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash.js";
 import { isValidBranchName } from "../utils.js";
 import NotValidBranchNameException from "../Errors/NotValidBranchNameException"
 import CannotDeleteBranchUsedByWorktree from "../Errors/CannotDeleteBranchUsedByWorktree.js";
-import BranchNotFound from "../Errors/BranchNotFound.js";
 import NoBranchNamed from "../Errors/NoBranchNamed.js";
 
 export default class GitObject{
@@ -129,7 +127,14 @@ export default class GitObject{
         return false
     }
     getRandomSha(){
-        return crypto.randomBytes(20).toString("hex");
+        const hexChars = '0123456789abcdef';
+        let result = '';
+
+        for (let i = 0; i < 20 * 2; i++) {
+        const rand = Math.floor(Math.random() * 16);
+        result += hexChars[rand];
+        }
+        return result;
     }
     getCurrentBranch(){
         var branch = this.branches.find(branch => branch.name == this.head.currentPosition) 

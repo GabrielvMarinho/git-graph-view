@@ -1,4 +1,4 @@
-import FlagRequiresValueException from "../Errors/flagRequiresValueException";
+import FlagRequiresValueException from "../Errors/FlagRequiresValueException";
 import InvalidCommandException from "../Errors/InvalidCommandException";
 import stringArgv from 'string-argv';
 
