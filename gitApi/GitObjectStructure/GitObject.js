@@ -4,7 +4,7 @@ import Branch from "./Branch.js";
 import BranchAlreadyExistException from "../Errors/BranchAlreadyExistException.js";
 import NoBranchNorCommitHash from "../Errors/NoBranchNorCommitHash.js";
 import { isValidBranchName } from "../utils.js";
-import NotValidBranchNameException from "../Errors/NotValidBranchNameException"
+import NotValidBranchNameException from "../Errors/NotValidBranchNameException.js"
 import CannotDeleteBranchUsedByWorktree from "../Errors/CannotDeleteBranchUsedByWorktree.js";
 import NoBranchNamed from "../Errors/NoBranchNamed.js";
 
