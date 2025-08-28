@@ -4,9 +4,7 @@ import "./CommandPrompt.css"
 export default function CommandPrompt({commandDispatcher}){
     const [listCommand, setListCommands] = useState([])
     const [currentCommand, setCurrentCommand] = useState()
-    useEffect(() =>{
-        console.log("refresh")
-    }, [listCommand])
+
     const handleCommandSubmit = function(e){
         e.preventDefault()
         let command = e.target.CommandPromptInput.value

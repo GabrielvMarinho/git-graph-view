@@ -5,7 +5,7 @@ export default class CommitHandler{
         this.gitObject = gitObject
     }
     commit(command, hideMessage=false){     
-        message = command.extractValueAfterFlag("-m")
+        const message = command.extractValueAfterFlag("-m")
         this.gitObject.createCommit(message)
         let returnString
         var positionString = this.gitObject.getCurrentBranchAndHashString()  

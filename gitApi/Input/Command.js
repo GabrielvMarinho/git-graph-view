@@ -19,7 +19,7 @@ export default class Command{
         
         const index = this._arguments.indexOf(flag);
         if (index !== -1) {
-            value = this._arguments[index + 1] 
+            let value = this._arguments[index + 1] 
 
             if(!value){
                 throw new FlagRequiresValueException(flag)

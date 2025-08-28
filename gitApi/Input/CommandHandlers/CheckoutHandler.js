@@ -9,7 +9,7 @@ export default class CheckoutHandler{
     }
     
     checkout(command, hideMessage=false){     
-        branchOrHash = command.extractValueAfterOneWordIgnoringDash("checkout")
+        const branchOrHash = command.extractValueAfterOneWordIgnoringDash("checkout")
         let returnString
         this.gitObject.updateCurrentHashOrBranchPointer(branchOrHash)
         if(this.gitObject.isBranch(branchOrHash)){
@@ -26,7 +26,7 @@ export default class CheckoutHandler{
         }
 
     }
-    checkoutCreateBranch(command){
+    checkoutCreateBranch(command, hideMessage=false){
         const steps = (branch, positionToGo) =>{
             this.gitObject.updateCurrentHashOrBranchPointer(positionToGo)
             this.gitObject.createBranch(branch)

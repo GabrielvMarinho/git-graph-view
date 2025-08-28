@@ -15,15 +15,7 @@ export default function GitGraph(){
     const uiManager = new UiManager(setNodes);
     const gitObject = new GitObject(uiManager);
     const commandDispatcher = new CommandDispatcher(gitObject)
-
-    // gitObject.createCommit()
-    // gitObject.createCommit()
-    // useEffect(() =>{
-    //     gitObject.createCommit()
-    //     console.log(nodes)
-    //     // setNodes((nodes) => [...nodes, {id:"1", position:{ x: 100, y: 100 }, type:"mainNode"}])
-    // }, ["asd"])
-
+    console.log(nodes)
     const nodeTypes = {
     	mainNode:MainNode
     }

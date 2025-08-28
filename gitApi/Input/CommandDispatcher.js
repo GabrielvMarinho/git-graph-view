@@ -17,7 +17,7 @@ export default class CommandDispatcher{
     }
     receiveAndDispatchCommand(commandString){
         var command = new Command(commandString, this.validCommands)
-        return this[command.subcommand](command, hideMessage=command.hasFlag("-q", "--quiet"))
+        return this[command.subcommand](command, command.hasFlag("-q", "--quiet"))
     }
    
     branch(command, hideMessage=false){
@@ -51,6 +51,7 @@ export default class CommandDispatcher{
         return this.executeAllFlags(command, flagFunctions, defaultFunction);
     }
     commit(command, hideMessage=false){
+        console.log(this.gitObject.getGraph())
         return this.commitHandler.commit(command, hideMessage)
     }
 

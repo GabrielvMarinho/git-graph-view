@@ -6,7 +6,7 @@ export default class BranchHandler{
         this.gitObject = gitObject
     }
     branch(command, hideMessage=false){
-        branchName = command.extractValueAfterOneWordIgnoringDash("branch")
+        const branchName = command.extractValueAfterOneWordIgnoringDash("branch")
 
         if(branchName){
             return this.gitObject.createBranch(branchName)        

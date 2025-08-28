@@ -3,7 +3,7 @@ export default class MergeHandler{
         this.gitObject = gitObject
     }
     merge(command, hideMessage=false){
-        hashOrBranchToMove = command.extractValueAfterOneWordIgnoringDash("merge")
+        const hashOrBranchToMove = command.extractValueAfterOneWordIgnoringDash("merge")
         let returnString
         if(this.gitObject.isCurrentCommitAnAncestorOf(hashOrBranchToMove)){
             returnString = this.mergeFastForward(hashOrBranchToMove)

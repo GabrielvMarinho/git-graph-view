@@ -5,7 +5,7 @@ export default class UiManager{
     }
     createCommit(commitHash){
         console.log(commitHash)
-        this.setNodes((nodes) => [...nodes, {id:"1", position:{ x: 100, y: 100 }, type:"mainNode"}])
+        this.setNodes((nodes) => [...nodes, {id:commitHash, position:{ x: 100, y: 100 }, type:"mainNode"}])
         return
     }
 }
