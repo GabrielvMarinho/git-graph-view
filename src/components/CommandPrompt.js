@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./CommandPrompt.css"
 
-export default function CommandPrompt(){
+export default function CommandPrompt({commandDispatcher}){
     const [listCommand, setListCommands] = useState([])
     const [currentCommand, setCurrentCommand] = useState()
     useEffect(() =>{
@@ -9,7 +9,9 @@ export default function CommandPrompt(){
     }, [listCommand])
     const handleCommandSubmit = function(e){
         e.preventDefault()
-        setListCommands((historyList) => [...historyList, e.target.CommandPromptInput.value])
+        let command = e.target.CommandPromptInput.value
+        commandDispatcher.receiveAndDispatchCommand(command)
+        setListCommands((historyList) => [...historyList, command])
         setCurrentCommand("")
     }
     return (

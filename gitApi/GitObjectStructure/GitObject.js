@@ -10,7 +10,7 @@ import NoBranchNamed from "../Errors/NoBranchNamed.js";
 
 export default class GitObject{
     
-    constructor(){
+    constructor(uiManager){
         var firstSha = this.getRandomSha()
         // always start with a commit
         this.graph = {[firstSha]:new Commit("First commit")}
@@ -18,7 +18,7 @@ export default class GitObject{
         var main = new Branch("main", firstSha)
         this.head = new Head(main.getName())
         this.branches = [main]
-        
+        this.uiManager = uiManager
     }
 
     getCurrentState(){
@@ -166,7 +166,7 @@ export default class GitObject{
     }
     // changes the current position to either a hash or if its a branch name, changes the branch hash
     updateCurrentHashOrBranchPointerToHash(hash){
-        currentPosition = this.head.currentPosition
+        let currentPosition = this.head.currentPosition
         var branch = this.branches.find(branch => branch.name == currentPosition)
         if(branch){  
             branch.currentHash = hash
@@ -282,6 +282,9 @@ export default class GitObject{
         const newCommit = new Commit(message, currentHash)
         this.graph[newCommitSha] = newCommit
         this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
+        try{
+            this.uiManager.createCommit(newCommitSha)
+        }catch{}
         return newCommitSha
     }
     getAlphabeticalOrderedBranchArray(){

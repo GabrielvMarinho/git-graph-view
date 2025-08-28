@@ -1,10 +1,9 @@
-import CheckoutHandler from "./CommandHandlers/CheckoutHandler"
-import Command from "./Command"
-import CommitHandler from "./CommandHandlers/CommitHandler"
-import MergeHandler from "./CommandHandlers/MergeHandler"
-import ResetHandler from "./CommandHandlers/ResetHandler"
-import BranchHandler from "./CommandHandlers/BranchHandler"
-
+import CheckoutHandler from "../Input/CommandHandlers/CheckoutHandler.js"
+import Command from "../Input/Command.js"
+import CommitHandler from "../Input/CommandHandlers/CommitHandler.js"
+import MergeHandler from "../Input/CommandHandlers/MergeHandler.js"
+import ResetHandler from "../Input/CommandHandlers/ResetHandler.js"
+import BranchHandler from "../Input/CommandHandlers/BranchHandler.js"
 export default class CommandDispatcher{
     
     validCommands = ["checkout", "commit", "merge", "reset", "branch"]

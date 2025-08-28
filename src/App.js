@@ -7,8 +7,8 @@ import { ReactFlowProvider } from "reactflow";
 export default function App() {
   
   return (
-    <ReactFlowProvider>
+    
       <GitGraph></GitGraph>
-    </ReactFlowProvider>
+    
   );
 };

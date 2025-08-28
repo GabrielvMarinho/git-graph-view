@@ -1,6 +1,6 @@
-import InvalidReferenceForBranchCreationException from "../../Errors/InvalidReferenceForBranchCreationException"
-import NotValidBranchNameException from "../../Errors/NotValidBranchNameException"
-import { isValidBranchName } from "../../utils"
+import InvalidReferenceForBranchCreationException from "../../Errors/InvalidReferenceForBranchCreationException.js"
+import NotValidBranchNameException from "../../Errors/NotValidBranchNameException.js"
+import { isValidBranchName } from "../../utils.js"
 
 export default class CheckoutHandler{
 

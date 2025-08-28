@@ -1,5 +1,5 @@
-import FlagRequiresValueException from "../Errors/FlagRequiresValueException";
-import InvalidCommandException from "../Errors/InvalidCommandException";
+import FlagRequiresValueException from "../Errors/FlagRequiresValueException.js";
+import InvalidCommandException from "../Errors/InvalidCommandException.js";
 import stringArgv from 'string-argv';
 
 export default class Command{

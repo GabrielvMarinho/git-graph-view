@@ -1,7 +1,5 @@
-import { setUncaughtExceptionCaptureCallback } from "process"
-import BranchNotFound from "../../Errors/BranchNotFound"
-import BranchNotFullyMergedException from "../../Errors/BranchNotFullyMergedException"
-import NoBranchNorCommitHash from "../../Errors/NoBranchNorCommitHash"
+import BranchNotFound from "../../Errors/BranchNotFound.js"
+import BranchNotFullyMergedException from "../../Errors/BranchNotFullyMergedException.js"
 
 export default class BranchHandler{
     constructor(gitObject){
