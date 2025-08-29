@@ -283,7 +283,7 @@ export default class GitObject{
         this.graph[newCommitSha] = newCommit
         this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
         try{
-            this.uiManager.createCommit(newCommitSha)
+            this.uiManager.createCommit(newCommitSha, currentHash)
         }catch{}
         return newCommitSha
     }
