@@ -15,12 +15,14 @@ const initialNode = {
    "position":{x:0, y:0},
    "type":"mainNode"
 }
+uiManager.setCurrentNodeHash(gitObject.getCurrentHash())
 export default function GitGraph(){
     
     const [nodes, setNodes, onChangeNodes] = useNodesState([initialNode]);
     const [edges, setEdges, onChangeEdges] = useEdgesState([]);
     console.log(nodes)
     useEffect(()=>{
+        uiManager.setNodes(nodes)
         uiManager.setSetNodes(setNodes) 
         uiManager.setSetEdges(setEdges)
     }, [nodes, edges])
