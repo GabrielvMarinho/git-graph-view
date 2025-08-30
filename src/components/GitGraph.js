@@ -10,16 +10,17 @@ import { useEffect } from 'react';
 const uiManager = new UiManager();
 const gitObject = new GitObject(uiManager);
 const commandDispatcher = new CommandDispatcher(gitObject)
-
+const initialNode = {
+   "id":gitObject.getCurrentHash(),
+   "position":{x:0, y:0},
+   "type":"mainNode"
+}
 export default function GitGraph(){
     
-    const [nodes, setNodes, onChangeNodes] = useNodesState([]);
+    const [nodes, setNodes, onChangeNodes] = useNodesState([initialNode]);
     const [edges, setEdges, onChangeEdges] = useEdgesState([]);
-    
+    console.log(nodes)
     useEffect(()=>{
-        console.log(nodes)
-        console.log(edges)
-
         uiManager.setSetNodes(setNodes) 
         uiManager.setSetEdges(setEdges)
     }, [nodes, edges])

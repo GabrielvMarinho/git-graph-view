@@ -51,7 +51,6 @@ export default class CommandDispatcher{
         return this.executeAllFlags(command, flagFunctions, defaultFunction);
     }
     commit(command, hideMessage=false){
-        console.log(this.gitObject.getGraph())
         return this.commitHandler.commit(command, hideMessage)
     }
 
