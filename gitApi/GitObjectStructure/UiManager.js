@@ -49,9 +49,10 @@ export default class UiManager{
     }
     createCommitIncrementCoordinates(){
         this.currentCommitPositionX += DISTANCE_NODES
+        console.log("the y is", this.currentCommitPositionY)
         let cont = 0
         while(true){
-            this.currentCommitPositionY = DISTANCE_NODES * Math.ceil(cont/2) * ((-1)**(cont+1))         
+            this.currentCommitPositionY = DISTANCE_NODES * Math.ceil(cont/2) * ((-1)**(cont+1)) + this.currentCommitPositionY      
             cont++
             let intersection = false
             for(let node of this.nodes){
@@ -59,7 +60,6 @@ export default class UiManager{
                     intersection = true 
                 }
             }
-            console.log(intersection)
             if(!intersection){
                 break
             }
