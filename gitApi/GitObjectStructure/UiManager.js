@@ -1,18 +1,17 @@
 
-const DISTANCE_NODES = 50
+const DISTANCE_NODES = 100
 const NODE_RADIUS = 25
 
 export default class UiManager{
-    constructor(){
-        
-        this.currentCommitPositionX =0
-        this.currentCommitPositionY =0    
+    constructor(){    
+        this.currentCommitPositionX = 0
+        this.currentCommitPositionY = 0    
+    }
+    setNodesList(nodes){
+        this.nodes = nodes
     }
     setCurrentNodeHash(hash){
         this.currentNodeHash = hash
-    }
-    setNodes(nodes){
-        this.nodes = nodes
     }
     setSetNodes(setNodes){
         this.setNodes = setNodes
@@ -21,8 +20,12 @@ export default class UiManager{
         this.setEdges = setEdges
     }
     createCommit(commitHash, parentHash){ 
-        this.incrementCounterAndPosition()
-       
+        console.log("tentando")
+        this.createCommitIncrementCoordinates()
+        console.log(this.currentCommitPositionX)
+        console.log(this.currentCommitPositionY)
+        console.log(commitHash)
+
         this.setNodes((nodes) => [...nodes, 
             {id:commitHash, 
             position:{ x: this.currentCommitPositionX, y: this.currentCommitPositionY }, 
@@ -35,23 +38,43 @@ export default class UiManager{
             type:"default"}])
         return
     }
-    createCommitIncrementCoordinates(){
-        const isNodeIntersecting = function(x1, y1, x2, y2){
+    areNodesIntersecting = function(x1, y1, x2, y2){
+        if((x1+NODE_RADIUS*2>x2 && x1-NODE_RADIUS*2<x2)
+            &&
+            (y1+NODE_RADIUS*2>y2 && y1-NODE_RADIUS*2<y2)
+         ){
+            return true
         }
-
-        //calculate if nodes are intersecting, if they are, increment c by one, until a free
-        //position is found by the formula, depending on the type of action in the graph 
-        //this will be different, this algorithm only applies to creating simple commits
+        return false
+    }
+    createCommitIncrementCoordinates(){
+        this.currentCommitPositionX += DISTANCE_NODES
+        let cont = 0
         while(true){
-            this.currentCommitPositionY = DISTANCE_NODES * Math.ceil(c/2) * ((-1)**(c+1))         
+            this.currentCommitPositionY = DISTANCE_NODES * Math.ceil(cont/2) * ((-1)**(cont+1))         
+            cont++
+            let intersection = false
             for(let node of this.nodes){
-                if(node.position.y == currentCommitPositionY){
-                    if(isNodeIntersecting()){
-
-                    }
+                if(this.areNodesIntersecting(node.position.x, node.position.y, this.currentCommitPositionX, this.currentCommitPositionY)){
+                    intersection = true 
                 }
+            }
+            console.log(intersection)
+            if(!intersection){
+                break
             }
         }
 
+    }
+    updateCurrentPositionToCommit(hash){
+        for(let node of this.nodes){
+            if(node.id == hash){
+                this.currentCommitPositionX = node.position.x
+                this.currentCommitPositionY = node.position.y
+                console.log("the current position is ", this.currentCommitPositionX, " - ", this.currentCommitPositionY)
+
+                break;
+            }
+        }
     }
 }

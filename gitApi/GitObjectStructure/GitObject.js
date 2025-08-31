@@ -170,11 +170,18 @@ export default class GitObject{
         var branch = this.branches.find(branch => branch.name == currentPosition)
         if(branch){  
             branch.currentHash = hash
+            var commitHash = this.getCurrentHash()
+            if(this.uiManager){
+                this.uiManager.updateCurrentPositionToCommit(commitHash)
+            }
         }
         else{
-            var commitHash = Object.keys(this.getGraph()).find(id => id == hash)
-            if(commitHash){
-                this.head.currentPosition = commitHash
+            var commitExists = Object.keys(this.getGraph()).find(id => id == hash)
+            if(commitExists){
+                this.head.currentPosition = hash
+                if(this.uiManager){
+                    this.uiManager.updateCurrentPositionToCommit(hash)
+                }
             }
             else{
                 throw new Error("No branch nor commit equals to")
@@ -185,15 +192,20 @@ export default class GitObject{
     updateCurrentHashOrBranchPointer(branchOrHash){
         var branch = this.branches.find(branch => branch.name == branchOrHash)
         if(branch){
-          
             this.head.currentPosition = branch.name
+            var commitHash = this.getCurrentHash()
+            if(this.uiManager){
+                this.uiManager.updateCurrentPositionToCommit(commitHash)
+            }
             return
-
         }
         else{
             var commitHash = Object.keys(this.getGraph()).find(id => id.startsWith(branchOrHash))
             if(commitHash){
                 this.head.currentPosition = commitHash
+                if(this.uiManager){
+                    this.uiManager.updateCurrentPositionToCommit(commitHash)
+                }
                 return 
             }
             else{
@@ -282,9 +294,9 @@ export default class GitObject{
         const newCommit = new Commit(message, currentHash)
         this.graph[newCommitSha] = newCommit
         this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
-        try{
+        if(this.uiManager){
             this.uiManager.createCommit(newCommitSha, currentHash)
-        }catch{}
+        }
         return newCommitSha
     }
     getAlphabeticalOrderedBranchArray(){
