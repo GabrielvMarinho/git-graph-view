@@ -252,7 +252,9 @@ export default class GitObject{
                 this.updateCurrentHashOrBranchPointer(branchName)
             }
         }
-        this.uiManager.updatePointers(this.getCurrentState())
+        if(this.uiManager){
+            this.uiManager.updatePointers(this.getCurrentState())
+        }
         return
         
     } 
@@ -266,7 +268,9 @@ export default class GitObject{
         var newBranch = new Branch(name, this.getCurrentHash())
         
         this.branches.push(newBranch)
-        this.uiManager.updatePointers(this.getCurrentState())
+        if(this.uiManager){
+            this.uiManager.updatePointers(this.getCurrentState())
+        }
     } 
     deleteBranch(name, force=false){    
         var branch = this.getCurrentBranch()
@@ -279,7 +283,9 @@ export default class GitObject{
         else{
             throw new CannotDeleteBranchUsedByWorktree(name)
         }
-        this.uiManager.updatePointers(this.getCurrentState())
+        if(this.uiManager){
+            this.uiManager.updatePointers(this.getCurrentState())
+        }
     }
 
     createMergeCommit(message, hashTomerge){
