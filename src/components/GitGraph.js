@@ -13,7 +13,7 @@ const commandDispatcher = new CommandDispatcher(gitObject)
 const initialNode = {
    "data":{id:gitObject.getCurrentHash()},
    "id":gitObject.getCurrentHash(),
-   "position":{x:0, y:0},
+   "position":{x:200, y:200},
    "type":"mainNode"
 }
 export default function GitGraph(){

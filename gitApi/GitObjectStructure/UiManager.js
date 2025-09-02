@@ -5,8 +5,8 @@ const NODE_RADIUS = 25
 export default class UiManager{
     constructor(){    
         this.head = "main"
-        this.currentCommitPositionX = 0
-        this.currentCommitPositionY = 0    
+        this.currentCommitPositionX = 200
+        this.currentCommitPositionY = 200    
         this.nodes = []
     }
     setNodesList(nodes){
