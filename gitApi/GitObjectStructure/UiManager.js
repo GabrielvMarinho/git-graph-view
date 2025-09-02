@@ -10,9 +10,6 @@ export default class UiManager{
     setNodesList(nodes){
         this.nodes = nodes
     }
-    setCurrentNodeHash(hash){
-        this.currentNodeHash = hash
-    }
     setSetNodes(setNodes){
         this.setNodes = setNodes
     }
@@ -20,22 +17,21 @@ export default class UiManager{
         this.setEdges = setEdges
     }
     createCommit(commitHash, parentHash){ 
-        console.log("tentando")
         this.createCommitIncrementCoordinates()
-        console.log(this.currentCommitPositionX)
-        console.log(this.currentCommitPositionY)
-        console.log(commitHash)
-
         this.setNodes((nodes) => [...nodes, 
-            {id:commitHash, 
+            {data:{id:commitHash.slice(0,7)},
+            id:commitHash, 
             position:{ x: this.currentCommitPositionX, y: this.currentCommitPositionY }, 
             type:"mainNode"}])
             
+        this.updateHeadToCommit(commitHash)
+
         this.setEdges((edges) => [...edges, 
             {id:`${parentHash} - ${commitHash}`, 
             source:parentHash, 
             target:commitHash, 
             type:"default"}])
+
         return
     }
     areNodesIntersecting = function(x1, y1, x2, y2){
@@ -49,7 +45,6 @@ export default class UiManager{
     }
     createCommitIncrementCoordinates(){
         this.currentCommitPositionX += DISTANCE_NODES
-        console.log("the y is", this.currentCommitPositionY)
         let cont = 0
         while(true){
             this.currentCommitPositionY = DISTANCE_NODES * Math.ceil(cont/2) * ((-1)**(cont+1)) + this.currentCommitPositionY      
@@ -66,15 +61,23 @@ export default class UiManager{
         }
 
     }
-    updateCurrentPositionToCommit(hash){
+    updateHeadToCommit(hash){
+        this.setNodes(
+            prev =>prev.map(node =>({
+                ...node,
+                data:{...node.data, isHead: node.id==hash}
+            }))
+        )
+    }
+    updateCurrentCoordinatesAndHeadToCommit(hash){
         for(let node of this.nodes){
             if(node.id == hash){
                 this.currentCommitPositionX = node.position.x
                 this.currentCommitPositionY = node.position.y
-                console.log("the current position is ", this.currentCommitPositionX, " - ", this.currentCommitPositionY)
-
+                this.updateHeadToCommit(hash)
                 break;
             }
+            
         }
     }
 }

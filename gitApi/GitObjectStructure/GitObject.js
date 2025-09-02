@@ -172,7 +172,7 @@ export default class GitObject{
             branch.currentHash = hash
             var commitHash = this.getCurrentHash()
             if(this.uiManager){
-                this.uiManager.updateCurrentPositionToCommit(commitHash)
+                this.uiManager.updateCurrentCoordinatesAndHeadToCommit(commitHash)
             }
         }
         else{
@@ -180,7 +180,7 @@ export default class GitObject{
             if(commitExists){
                 this.head.currentPosition = hash
                 if(this.uiManager){
-                    this.uiManager.updateCurrentPositionToCommit(hash)
+                    this.uiManager.updateCurrentCoordinatesAndHeadToCommit(hash)
                 }
             }
             else{
@@ -195,7 +195,7 @@ export default class GitObject{
             this.head.currentPosition = branch.name
             var commitHash = this.getCurrentHash()
             if(this.uiManager){
-                this.uiManager.updateCurrentPositionToCommit(commitHash)
+                this.uiManager.updateCurrentCoordinatesAndHeadToCommit(commitHash)
             }
             return
         }
@@ -204,7 +204,7 @@ export default class GitObject{
             if(commitHash){
                 this.head.currentPosition = commitHash
                 if(this.uiManager){
-                    this.uiManager.updateCurrentPositionToCommit(commitHash)
+                    this.uiManager.updateCurrentCoordinatesAndHeadToCommit(commitHash)
                 }
                 return 
             }
