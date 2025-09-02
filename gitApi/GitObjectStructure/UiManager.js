@@ -4,8 +4,10 @@ const NODE_RADIUS = 25
 
 export default class UiManager{
     constructor(){    
+        this.head = "main"
         this.currentCommitPositionX = 0
         this.currentCommitPositionY = 0    
+        this.nodes = []
     }
     setNodesList(nodes){
         this.nodes = nodes
@@ -18,13 +20,13 @@ export default class UiManager{
     }
     createCommit(commitHash, parentHash){ 
         this.createCommitIncrementCoordinates()
-        this.setNodes((nodes) => [...nodes, 
-            {data:{id:commitHash.slice(0,7)},
+        this.nodes.push( 
+            {data:{id:commitHash},
             id:commitHash, 
             position:{ x: this.currentCommitPositionX, y: this.currentCommitPositionY }, 
-            type:"mainNode"}])
+            type:"mainNode"})
             
-        this.updateHeadToCommit(commitHash)
+        this.updateCurrentCoordinatesToCommit(commitHash)
 
         this.setEdges((edges) => [...edges, 
             {id:`${parentHash} - ${commitHash}`, 
@@ -61,20 +63,33 @@ export default class UiManager{
         }
 
     }
-    updateHeadToCommit(hash){
-        this.setNodes(
-            prev =>prev.map(node =>({
+    updatePointers(currentState){
+        let nodes = this.nodes.map(node =>{
+            const newNode = {
                 ...node,
-                data:{...node.data, isHead: node.id==hash}
-            }))
-        )
+                data: {
+                ...node.data,
+                headPosition: currentState.head.currentPosition,
+                branches: []
+                }
+            };
+            for (let branch of currentState.branches) {
+                if (branch.currentHash == node.id) {
+                    newNode.data.branches.push(branch.name);
+                }
+            }
+            return newNode
+        })
+      
+        this.setNodes(nodes)
+
     }
-    updateCurrentCoordinatesAndHeadToCommit(hash){
+   
+    updateCurrentCoordinatesToCommit(hash){
         for(let node of this.nodes){
             if(node.id == hash){
                 this.currentCommitPositionX = node.position.x
                 this.currentCommitPositionY = node.position.y
-                this.updateHeadToCommit(hash)
                 break;
             }
             

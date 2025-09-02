@@ -11,22 +11,26 @@ const uiManager = new UiManager();
 const gitObject = new GitObject(uiManager);
 const commandDispatcher = new CommandDispatcher(gitObject)
 const initialNode = {
-   "data":{id:gitObject.getCurrentHash().slice(0,7), isHead:true},
+   "data":{id:gitObject.getCurrentHash()},
    "id":gitObject.getCurrentHash(),
    "position":{x:0, y:0},
    "type":"mainNode"
 }
-
 export default function GitGraph(){
     
     const [nodes, setNodes, onChangeNodes] = useNodesState([initialNode]);
     const [edges, setEdges, onChangeEdges] = useEdgesState([]);
-
+    
     useEffect(()=>{
         uiManager.setNodesList(nodes)
         uiManager.setSetNodes(setNodes) 
         uiManager.setSetEdges(setEdges)
+
     }, [nodes, edges])
+
+    useEffect(()=>{
+        uiManager.updatePointers(gitObject.getCurrentState())
+    }, [])
 
     const nodeTypes = {
     	mainNode:MainNode

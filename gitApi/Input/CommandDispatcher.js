@@ -17,7 +17,8 @@ export default class CommandDispatcher{
     }
     receiveAndDispatchCommand(commandString){
         var command = new Command(commandString, this.validCommands)
-        return this[command.subcommand](command, command.hasFlag("-q", "--quiet"))
+        let msg = this[command.subcommand](command, command.hasFlag("-q", "--quiet"))
+        return msg
     }
    
     branch(command, hideMessage=false){

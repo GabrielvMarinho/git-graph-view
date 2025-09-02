@@ -6,10 +6,26 @@
     color: white;
     font-family: "Poppins";
 }
-.head{
+.detachedHeadNode{
     background-color: rgb(162, 255, 138) !important;
 }
-
+.activateBranchName{
+    font-weight: 900 !important;
+    font-size: 24px !important;
+    color: rgb(162, 255, 138) !important;
+}
+.branchName{
+    font-weight: 200;
+    font-size: 20px;
+    color: white;
+    font-family: "Poppins";
+}
+.branchesMainNode{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: fit-content;
+}
 .mainNodeHandler{
     opacity: 0;
 }

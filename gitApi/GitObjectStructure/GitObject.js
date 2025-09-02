@@ -170,9 +170,9 @@ export default class GitObject{
         var branch = this.branches.find(branch => branch.name == currentPosition)
         if(branch){  
             branch.currentHash = hash
-            var commitHash = this.getCurrentHash()
             if(this.uiManager){
-                this.uiManager.updateCurrentCoordinatesAndHeadToCommit(commitHash)
+                this.uiManager.updateCurrentCoordinatesToCommit(hash)
+                this.uiManager.updatePointers(this.getCurrentState())
             }
         }
         else{
@@ -180,7 +180,8 @@ export default class GitObject{
             if(commitExists){
                 this.head.currentPosition = hash
                 if(this.uiManager){
-                    this.uiManager.updateCurrentCoordinatesAndHeadToCommit(hash)
+                    this.uiManager.updateCurrentCoordinatesToCommit(hash)
+                    this.uiManager.updatePointers(this.getCurrentState())
                 }
             }
             else{
@@ -195,7 +196,8 @@ export default class GitObject{
             this.head.currentPosition = branch.name
             var commitHash = this.getCurrentHash()
             if(this.uiManager){
-                this.uiManager.updateCurrentCoordinatesAndHeadToCommit(commitHash)
+                this.uiManager.updateCurrentCoordinatesToCommit(commitHash)
+                this.uiManager.updatePointers(this.getCurrentState())
             }
             return
         }
@@ -204,7 +206,8 @@ export default class GitObject{
             if(commitHash){
                 this.head.currentPosition = commitHash
                 if(this.uiManager){
-                    this.uiManager.updateCurrentCoordinatesAndHeadToCommit(commitHash)
+                    this.uiManager.updateCurrentCoordinatesToCommit(commitHash)
+                    this.uiManager.updatePointers(this.getCurrentState())
                 }
                 return 
             }
@@ -293,10 +296,10 @@ export default class GitObject{
         const newCommitSha = this.getRandomSha()
         const newCommit = new Commit(message, currentHash)
         this.graph[newCommitSha] = newCommit
-        this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
         if(this.uiManager){
             this.uiManager.createCommit(newCommitSha, currentHash)
         }
+        this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
         return newCommitSha
     }
     getAlphabeticalOrderedBranchArray(){
