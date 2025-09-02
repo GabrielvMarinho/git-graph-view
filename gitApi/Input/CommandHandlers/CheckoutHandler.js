@@ -32,9 +32,9 @@ export default class CheckoutHandler{
             this.gitObject.createBranch(branch)
             this.gitObject.updateCurrentHashOrBranchPointer(branch)
         }
-        branch = command.extractValueAfterFlag("-b")
+        let branch = command.extractValueAfterFlag("-b")
 
-        positionToGo = command.extractValueAfterOneWordIgnoringDash(branch)
+        let positionToGo = command.extractValueAfterOneWordIgnoringDash(branch)
         let returnString
         if(positionToGo){
             if(!isValidBranchName(positionToGo)){

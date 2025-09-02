@@ -1,5 +1,5 @@
 
-const DISTANCE_NODES = 100
+const DISTANCE_NODES = 200
 const NODE_RADIUS = 25
 
 export default class UiManager{
@@ -48,9 +48,16 @@ export default class UiManager{
     createCommitIncrementCoordinates(){
         this.currentCommitPositionX += DISTANCE_NODES
         let cont = 0
+        const baseY = this.currentCommitPositionY; 
         while(true){
-            this.currentCommitPositionY = DISTANCE_NODES * Math.ceil(cont/2) * ((-1)**(cont+1)) + this.currentCommitPositionY      
-            cont++
+            if(cont == 0){
+                this.currentCommitPositionY = baseY 
+            }else{
+                const direction = (cont % 2 === 0) ? 1 : -1; 
+                const offset = DISTANCE_NODES * Math.ceil(cont / 2) * direction;
+                this.currentCommitPositionY = baseY + offset 
+            }
+            cont = cont + 1
             let intersection = false
             for(let node of this.nodes){
                 if(this.areNodesIntersecting(node.position.x, node.position.y, this.currentCommitPositionX, this.currentCommitPositionY)){
