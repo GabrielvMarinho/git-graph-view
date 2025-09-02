@@ -6,11 +6,17 @@ export default function CommandPrompt({commandDispatcher}){
     const [temporaryListCommands, setTemporaryListCommands] = useState([])
     const [index, setIndex] = useState(0)
     const [currentCommand, setCurrentCommand] = useState()
-
+    const [lastOutput, setLastOutput] = useState()
     const handleCommandSubmit = function(e){
         e.preventDefault()
         let command = e.target.CommandPromptInput.value
-        commandDispatcher.receiveAndDispatchCommand(command)
+        try{
+            let output = commandDispatcher.receiveAndDispatchCommand(command)
+            setLastOutput({message:output, error:false})
+        }catch(e ){
+            console.log(e)
+            setLastOutput({message:e.message, error:true})
+        }
         setIndex(listCommands.length+1)
         setTemporaryListCommands([...listCommands, command])
         setListCommands((historyList) => [...historyList, command])
@@ -18,8 +24,6 @@ export default function CommandPrompt({commandDispatcher}){
     }
     const handleKeyDown = function(e){
         if(e.key == "ArrowDown"){
-            console.log("length", listCommands.length)
-            console.log(index)
             if(index<listCommands.length){
                 setIndex((prev) => {return prev+1})
             }
@@ -32,11 +36,9 @@ export default function CommandPrompt({commandDispatcher}){
     }
     const updateTemporaryListCommands = function(e){
         e.preventDefault()
-        console.log(e.target)
         let command = e.target.value
         const newArray = [...temporaryListCommands]
         newArray[index] = command
-        console.log(newArray)
         setTemporaryListCommands(newArray)
     }
     const updateCurrentCommand = function(e){
@@ -52,6 +54,7 @@ export default function CommandPrompt({commandDispatcher}){
                 className="cmdArrowInput" 
                 onChange={index==listCommands.length?(e) =>updateCurrentCommand(e):(e)=>{console.log("______");updateTemporaryListCommands(e)}}></input>
             </form>
+            <h3 className={`lastOutput ${lastOutput && lastOutput.error?"error":""}`}>{lastOutput && lastOutput.message}</h3>
         </div>
     )
 }

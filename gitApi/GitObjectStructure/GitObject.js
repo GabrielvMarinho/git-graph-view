@@ -315,7 +315,7 @@ export default class GitObject{
         })
     }
     getAllBranchesString(){
-        branchesString = ""
+        let branchesString = ""
         if(this.isHeadDetached()){
             branchesString = `* (HEAD detached at ${this.getCurrentHash().slice(0, 7)})\n`
         }
