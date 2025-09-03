@@ -57,7 +57,7 @@ export default function GitGraph(){
                 onNodesChange={onChangeNodes}
                 onEdgesChange={onChangeEdges}
                 >
-                <Background color='#505050' bgColor='#050505'/>
+                <Background bgColor='#121212ff'/>
                 </ReactFlow>
             </ReactFlowProvider>
         </div>
