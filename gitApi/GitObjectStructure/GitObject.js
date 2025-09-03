@@ -302,7 +302,7 @@ export default class GitObject{
         const newCommit = new Commit(message, currentHash)
         this.graph[newCommitSha] = newCommit
         if(this.uiManager){
-            this.uiManager.createCommit(newCommitSha, currentHash)
+            this.uiManager.createCommit(newCommitSha, currentHash, message)
         }
         this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
         return newCommitSha

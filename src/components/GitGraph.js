@@ -22,7 +22,6 @@ export default function GitGraph(){
     const [edges, setEdges, onChangeEdges] = useEdgesState([]);
     
     useEffect(()=>{
-        console.log(nodes)
         const selectedNode = nodes.filter(node => {return node.selected==true})[0]
         if(selectedNode){
             uiManager.updateCoordinates(selectedNode.position.x, selectedNode.position.y)
@@ -45,9 +44,8 @@ export default function GitGraph(){
         width: "100vw",
         height: "100vh"
         }}>
-            <ReactFlowProvider >
+            <ReactFlowProvider>
                 <CommandPrompt commandDispatcher={commandDispatcher}></CommandPrompt>
-            
                 <ReactFlow
                 className='reactFlowPanel'
                 colorMode='dark'

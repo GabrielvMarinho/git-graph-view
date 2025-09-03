@@ -10,7 +10,6 @@ export default class UiManager{
         this.nodes = []
     }
     updateCoordinates(x, y){
-        console.log("new cords", x, y)
         this.currentCommitPositionX = x
         this.currentCommitPositionY = y
     }
@@ -23,10 +22,10 @@ export default class UiManager{
     setSetEdges(setEdges){
         this.setEdges = setEdges
     }
-    createCommit(commitHash, parentHash){ 
+    createCommit(commitHash, parentHash=null, message=null){ 
         this.createCommitIncrementCoordinates()
         this.nodes.push( 
-            {data:{id:commitHash},
+            {data:{id:commitHash, message:message},
             id:commitHash, 
             position:{ x: this.currentCommitPositionX, y: this.currentCommitPositionY }, 
             type:"mainNode"})

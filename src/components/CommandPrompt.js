@@ -16,7 +16,6 @@ export default function CommandPrompt({commandDispatcher}){
             setListOutput((prev) =>[...prev, {message:output, error:false}])
 
         }catch(e ){
-            console.log(e)
             setListOutput((prev) =>[...prev, {message:e.message, error:true}])
         }
         setIndex(listCommands.length+1)
@@ -47,7 +46,6 @@ export default function CommandPrompt({commandDispatcher}){
         let command = e.target.value
         setCurrentCommand(command)
     }
-    console.log(listOutput.length)
     return (
         <div className="commandPrompt">
             <form className="dispatchCommand" onSubmit={(e) => {handleCommandSubmit(e)}}>
@@ -55,7 +53,7 @@ export default function CommandPrompt({commandDispatcher}){
                 <input onKeyDown={handleKeyDown} id="CommandPromptInput" 
                 autoComplete="off" value={index==listCommands.length?currentCommand:temporaryListCommands[index]} 
                 className="cmdInput" 
-                onChange={index==listCommands.length?(e) =>updateCurrentCommand(e):(e)=>{console.log("______");updateTemporaryListCommands(e)}}></input>
+                onChange={index==listCommands.length?(e) =>updateCurrentCommand(e):(e)=>{updateTemporaryListCommands(e)}}></input>
             </form>
             <div style={{display:"flex", flexDirection:"column"}}>
             {listOutput.length>0 &&listOutput.map((output, index) =>(
