@@ -1,11 +1,17 @@
 @import url("../styles.css");
 .commandPrompt{
+    overflow-y: auto;
+    height: 60vh;
+    margin-top: 30px;
+    margin-left: 10px;
     position: absolute;
+    display: flex;
+    flex-direction: column-reverse;
     width: 300px;
     color: rgb(243, 243, 243);
     z-index: 1;
 }
-.cmdArrowInput{
+.cmdInput{
     width: 100%;
     background-color: transparent;
     color: rgb(243, 243, 243);
@@ -15,14 +21,22 @@
     font-family: "Ubuntu Mono", monospace;
 }
 .cmdArrow{
+    word-break: keep-all;
+    color: rgb(40, 200, 59);
+
     font-size: medium;
     font-family: "Ubuntu Mono", monospace;
+}
+.dispatchCommandHistory{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 .dispatchCommand{
     display: flex;
     gap: 2px;
 }
-.lastOutput{
+.output{
     font-size: medium;
     font-family: "Ubuntu Mono", monospace;
     font-weight: 100;
