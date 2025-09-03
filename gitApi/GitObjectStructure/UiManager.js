@@ -1,13 +1,18 @@
 
-const DISTANCE_NODES = 200
-const NODE_RADIUS = 25
+const DISTANCE_NODES = 150
+const NODE_RADIUS = 20
 
 export default class UiManager{
     constructor(){    
         this.head = "main"
-        this.currentCommitPositionX = 200
-        this.currentCommitPositionY = 200    
+        this.currentCommitPositionX = 500
+        this.currentCommitPositionY = 300    
         this.nodes = []
+    }
+    updateCoordinates(x, y){
+        console.log("new cords", x, y)
+        this.currentCommitPositionX = x
+        this.currentCommitPositionY = y
     }
     setNodesList(nodes){
         this.nodes = nodes

@@ -13,7 +13,7 @@ const commandDispatcher = new CommandDispatcher(gitObject)
 const initialNode = {
    "data":{id:gitObject.getCurrentHash()},
    "id":gitObject.getCurrentHash(),
-   "position":{x:200, y:200},
+   "position":{x:500, y:300},
    "type":"mainNode"
 }
 export default function GitGraph(){
@@ -22,10 +22,15 @@ export default function GitGraph(){
     const [edges, setEdges, onChangeEdges] = useEdgesState([]);
     
     useEffect(()=>{
+        console.log(nodes)
+        const selectedNode = nodes.filter(node => {return node.selected==true})[0]
+        if(selectedNode){
+            uiManager.updateCoordinates(selectedNode.position.x, selectedNode.position.y)
+        }
         uiManager.setNodesList(nodes)
         uiManager.setSetNodes(setNodes) 
         uiManager.setSetEdges(setEdges)
-
+        
     }, [nodes, edges])
 
     useEffect(()=>{
@@ -40,10 +45,11 @@ export default function GitGraph(){
         width: "100vw",
         height: "100vh"
         }}>
-            <ReactFlowProvider>
+            <ReactFlowProvider >
                 <CommandPrompt commandDispatcher={commandDispatcher}></CommandPrompt>
             
                 <ReactFlow
+                className='reactFlowPanel'
                 colorMode='dark'
                 nodes={nodes}
                 nodeTypes={nodeTypes}
@@ -51,8 +57,7 @@ export default function GitGraph(){
                 onNodesChange={onChangeNodes}
                 onEdgesChange={onChangeEdges}
                 >
-                <Background />
-                <Controls />
+                <Background color='#505050' bgColor='#050505'/>
                 </ReactFlow>
             </ReactFlowProvider>
         </div>
