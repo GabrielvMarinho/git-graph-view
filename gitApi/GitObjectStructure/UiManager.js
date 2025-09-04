@@ -84,20 +84,20 @@ export default class UiManager{
                 }
             };
             for (let branch of currentState.branches) {
+                
                 if (branch.currentHash == node.id) {
                     newNode.data.branches.push(branch.name);
                 }
             }
             return newNode
         })
-      
         this.setNodes(nodes)
 
     }
    
     updateCurrentCoordinatesToCommit(hash){
         for(let node of this.nodes){
-            if(node.id == hash){
+            if(node.id.startsWith(hash)){
                 this.currentCommitPositionX = node.position.x
                 this.currentCommitPositionY = node.position.y
                 break;

@@ -161,7 +161,7 @@ export default class GitObject{
             return branch.currentHash
         }
         else{
-            return branchOrHash
+            return hash
         }
     }
     // changes the current position to either a hash or if its a branch name, changes the branch hash
