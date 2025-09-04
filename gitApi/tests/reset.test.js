@@ -29,7 +29,10 @@ test("git reset", ()=>{
     expect(
         curentBranch.name
     ).toBe("dev")
-    
+
+    expect(
+        () =>cmdDisp.receiveAndDispatchCommand(`git reset branchThatDoesntExist`)
+    ).toThrow("fatal: ambiguous argument 'branchThatDoesntExist': unknown revision or path not in the working tree.")
 })
 
 

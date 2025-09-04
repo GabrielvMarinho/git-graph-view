@@ -49,7 +49,6 @@ export default class UiManager{
         return false
     }
     createCommitIncrementCoordinates(){
-        console.log(this.currentCommitPositionX)
         this.currentCommitPositionX += DISTANCE_NODES
 
         let cont = 0
@@ -75,7 +74,6 @@ export default class UiManager{
         }
     }
     updatePointers(currentState){
-        console.log(this.currentCommitPositionX)
         let nodes = this.nodes.map(node =>{
             const newNode = {
                 ...node,

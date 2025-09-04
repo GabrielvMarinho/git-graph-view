@@ -155,7 +155,7 @@ export default class GitObject{
     }
     // return the hash from the branch or just the sent value 
     getHashFrom(branchOrHash){
-        var hash = Object.keys(this.getGraph()).find(id => id == branchOrHash)
+        var hash = Object.keys(this.getGraph()).find(id => id.startsWith(branchOrHash))
         if(hash == null){
             var branch = this.branches.find(branch => branch.name == branchOrHash)
             return branch.currentHash

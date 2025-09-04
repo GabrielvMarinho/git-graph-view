@@ -15,7 +15,8 @@ export default function CommandPrompt({commandDispatcher}){
             let output = commandDispatcher.receiveAndDispatchCommand(command)
             setListOutput((prev) =>[...prev, {message:output, error:false}])
 
-        }catch(e ){
+        }catch(e){
+            console.log(e)
             setListOutput((prev) =>[...prev, {message:e.message, error:true}])
         }
         setIndex(listCommands.length+1)
