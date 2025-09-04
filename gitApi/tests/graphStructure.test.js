@@ -6,7 +6,6 @@ test("is a specific commit ancestor of current commit", ()=>{
     const cmdDisp = new CommandDispatcher(gitObject)
     const firstSha = gitObject.getCurrentHash()
     cmdDisp.receiveAndDispatchCommand("git commit")
-    const secondSha = gitObject.getCurrentHash()
 
     expect(
         gitObject.isSpecificCommitAnAncestorOfCurrentCommit(firstSha)

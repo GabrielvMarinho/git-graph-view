@@ -14,7 +14,6 @@ export default function CommandPrompt({commandDispatcher}){
         try{
             let output = commandDispatcher.receiveAndDispatchCommand(command)
             setListOutput((prev) =>[...prev, {message:output, error:false}])
-
         }catch(e){
             setListOutput((prev) =>[...prev, {message:e.message, error:true}])
         }
@@ -60,9 +59,13 @@ export default function CommandPrompt({commandDispatcher}){
                 <div className="dispatchCommandHistory">
                     <div style={{display:"flex"}}>
                     <label className="cmdArrow">marinho@desktop<span>:</span>~<span>$</span>&nbsp;</label>
-                    <label className="cmdInput">{listCommands[index]}</label>
+                    <label style={{whiteSpace:"pre-line"}} className="cmdInput">
+                        {listCommands[index]}
+                    </label>
                     </div>
-                    <h3 className={`output ${output.error?"error":""}`}>{output.message}</h3>
+                    <h3 style={{whiteSpace:"pre"}} className={`output ${output.error?"error":""}`}>
+                        {output.message}
+                        </h3>
                 </div>
             ))}
             </div>

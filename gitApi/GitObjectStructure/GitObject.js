@@ -309,8 +309,8 @@ export default class GitObject{
     }
     getAlphabeticalOrderedBranchArray(){
         return this.branches.sort((a, b) =>{
-            aName = a.getName()
-            bName = b.getName()
+            let aName = a.getName()
+            let bName = b.getName()
             return aName>bName ? 1 : aName<bName ? -1 : 0
         })
     }
