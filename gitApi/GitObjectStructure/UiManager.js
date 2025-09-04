@@ -29,7 +29,6 @@ export default class UiManager{
             id:commitHash, 
             position:{ x: this.currentCommitPositionX, y: this.currentCommitPositionY }, 
             type:"mainNode"})
-            
         this.updateCurrentCoordinatesToCommit(commitHash)
 
         this.setEdges((edges) => [...edges, 
@@ -50,7 +49,9 @@ export default class UiManager{
         return false
     }
     createCommitIncrementCoordinates(){
+        console.log(this.currentCommitPositionX)
         this.currentCommitPositionX += DISTANCE_NODES
+
         let cont = 0
         const baseY = this.currentCommitPositionY; 
         while(true){
@@ -72,9 +73,9 @@ export default class UiManager{
                 break
             }
         }
-
     }
     updatePointers(currentState){
+        console.log(this.currentCommitPositionX)
         let nodes = this.nodes.map(node =>{
             const newNode = {
                 ...node,
