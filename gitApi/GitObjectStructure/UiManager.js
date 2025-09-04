@@ -74,6 +74,7 @@ export default class UiManager{
         }
     }
     updatePointers(currentState){
+        this.head = currentState.head.currentPosition
         let nodes = this.nodes.map(node =>{
             const newNode = {
                 ...node,

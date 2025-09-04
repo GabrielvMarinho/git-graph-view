@@ -23,7 +23,8 @@ export default function GitGraph(){
     
     useEffect(()=>{
         const selectedNode = nodes.filter(node => {return node.selected==true})[0]
-        if(selectedNode && selectedNode.dragging){
+        if(selectedNode && selectedNode.dragging &&
+            (selectedNode.id == uiManager.head || selectedNode.data.branches.includes(uiManager.head))){
             uiManager.updateCoordinates(selectedNode.position.x, selectedNode.position.y)
         }
         
