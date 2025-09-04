@@ -1,3 +1,4 @@
+import BranchAlreadyExistException from "../../Errors/BranchAlreadyExistException.js"
 import InvalidReferenceForBranchCreationException from "../../Errors/InvalidReferenceForBranchCreationException.js"
 import NotValidBranchNameException from "../../Errors/NotValidBranchNameException.js"
 import { isValidBranchName } from "../../utils.js"
@@ -27,10 +28,19 @@ export default class CheckoutHandler{
 
     }
     checkoutCreateBranch(command, hideMessage=false){
-        const steps = (branch, positionToGo) =>{
+        const steps = (branch, positionToGo, originalPosition) =>{
             this.gitObject.updateCurrentHashOrBranchPointer(positionToGo)
-            this.gitObject.createBranch(branch)
-            this.gitObject.updateCurrentHashOrBranchPointer(branch)
+            try{
+                this.gitObject.createBranch(branch)
+                this.gitObject.updateCurrentHashOrBranchPointer(branch)
+
+            }catch(e){
+                //this is to get back to the original position because createBranch
+                //can throw many errors, this is done to not get a detached head
+                //because the process failed in the middle of it
+                this.gitObject.updateCurrentHashOrBranchPointer(originalPosition)
+                throw e
+            }
         }
         let branch = command.extractValueAfterFlag("-b")
 
@@ -40,10 +50,10 @@ export default class CheckoutHandler{
             if(!isValidBranchName(positionToGo)){
                 throw new NotValidBranchNameException(positionToGo)
             }
-            steps(branch, positionToGo)
+            steps(branch, positionToGo, this.gitObject.isHeadDetached()?this.gitObject.getCurrentHash():this.gitObject.getCurrentBranch().name)
             returnString = `Switched to a new branch '${branch}'`
         }else{
-            steps(branch, this.gitObject.getCurrentHash())
+            steps(branch, this.gitObject.getCurrentHash(), this.gitObject.isHeadDetached()?this.gitObject.getCurrentHash():this.gitObject.getCurrentBranch().name)
         }
         
         if(hideMessage){

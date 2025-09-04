@@ -55,7 +55,9 @@ test("git checkout -b 'branch'", () =>{
         () => cmdDisp.receiveAndDispatchCommand("git checkout --quiet -b .")
     ).toThrow("fatal: '.' is not a valid branch name")
 
-
+    expect(
+        gitObject.getCurrentState()["head"].currentPosition
+    ).toBe("newestBranch")
 })
 
 

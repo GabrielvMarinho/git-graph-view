@@ -37,7 +37,7 @@ export default class BranchHandler{
         this.gitObject.renameBranch(firstValue, secondValue)
     }
     branchDelete(command, hideMessage=false){
-        branchToDelete = command.extractValueAfterFlag("-D") || command.extractValueAfterOneWordIgnoringDash("--force") 
+        let branchToDelete = command.extractValueAfterFlag("-D") || command.extractValueAfterOneWordIgnoringDash("--force") 
         if(this.gitObject.isBranch(branchToDelete)){
             let hash = this.gitObject.getHashFrom(branchToDelete)
             this.gitObject.deleteBranch(branchToDelete)
@@ -56,7 +56,7 @@ export default class BranchHandler{
         if(command.hasFlag("--force")){
             returnString= this.branchDelete(command, hideMessage)
         }
-        branchToDelete = command.extractValueAfterFlag("-d") || command.extractValueAfterFlag("--delete") 
+        let branchToDelete = command.extractValueAfterFlag("-d") || command.extractValueAfterFlag("--delete") 
                 
         if(this.gitObject.isBranch(branchToDelete)){
             if(this.gitObject.isSpecificCommitAnAncestorOfCurrentCommit(branchToDelete)){

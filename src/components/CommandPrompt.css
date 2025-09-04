@@ -11,7 +11,7 @@
     position: absolute;
     display: flex;
     flex-direction: column-reverse;
-    width: 350px;
+    width: 370px;
     color: rgb(243, 243, 243);
     z-index: 1;
 }
@@ -19,7 +19,6 @@ textarea{
     all: unset;
 }
 .cmdInput{
-    word-break: break-all;
     width: 100%;
     background-color: transparent;
     color: rgb(243, 243, 243);
@@ -50,7 +49,6 @@ textarea{
     font-size: medium;
     font-family: "Ubuntu Mono", monospace;
     font-weight: 100;
-    word-break: break-all;
 }
 .error{
     color:#cb1100;

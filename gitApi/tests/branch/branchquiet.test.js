@@ -15,7 +15,6 @@ test("git branch -d 'existingBranch'", ()=>{
     cmdDisp.receiveAndDispatchCommand("git branch dev")
     cmdDisp.receiveAndDispatchCommand("git commit")
     cmdDisp.receiveAndDispatchCommand("git checkout dev")
-    const devHash = gitObject.getCurrentHash()
     expect(
         () => cmdDisp.receiveAndDispatchCommand("git branch -d main -q")
     ).toThrow("error: The branch 'main' is not fully merged.\nIf you are sure you want to delete it, run 'git branch -D main'")

@@ -48,7 +48,7 @@ export default function CommandPrompt({commandDispatcher}){
     return (
         <div className="commandPrompt">
             <form className="dispatchCommand" onSubmit={(e) => {handleCommandSubmit(e)}}>
-                <label className="cmdArrow">marinho@desktop<span>:</span>~<span>$</span>&nbsp;</label>
+                <label className="cmdArrow">marinho@git<span>:</span>~<span>$</span>&nbsp;</label>
                 <input autoFocus onKeyDown={handleKeyDown} id="CommandPromptInput" 
                 autoComplete="off" value={index==listCommands.length?currentCommand:temporaryListCommands[index]} 
                 className="cmdInput" 
@@ -58,12 +58,12 @@ export default function CommandPrompt({commandDispatcher}){
             {listOutput.length>0 &&listOutput.map((output, index) =>(
                 <div className="dispatchCommandHistory">
                     <div style={{display:"flex"}}>
-                    <label className="cmdArrow">marinho@desktop<span>:</span>~<span>$</span>&nbsp;</label>
+                    <label className="cmdArrow">marinho@git<span>:</span>~<span>$</span>&nbsp;</label>
                     <label style={{whiteSpace:"pre-line"}} className="cmdInput">
                         {listCommands[index]}
                     </label>
                     </div>
-                    <h3 style={{whiteSpace:"pre"}} className={`output ${output.error?"error":""}`}>
+                    <h3 style={{whiteSpace:"pre-wrap"}} className={`output ${output.error?"error":""}`}>
                         {output.message}
                         </h3>
                 </div>
