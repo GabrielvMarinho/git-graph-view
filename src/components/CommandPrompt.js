@@ -50,7 +50,7 @@ export default function CommandPrompt({commandDispatcher}){
         <div className="commandPrompt">
             <form className="dispatchCommand" onSubmit={(e) => {handleCommandSubmit(e)}}>
                 <label className="cmdArrow">marinho@desktop<span>:</span>~<span>$</span>&nbsp;</label>
-                <input onKeyDown={handleKeyDown} id="CommandPromptInput" 
+                <input autoFocus onKeyDown={handleKeyDown} id="CommandPromptInput" 
                 autoComplete="off" value={index==listCommands.length?currentCommand:temporaryListCommands[index]} 
                 className="cmdInput" 
                 onChange={index==listCommands.length?(e) =>updateCurrentCommand(e):(e)=>{updateTemporaryListCommands(e)}}></input>
