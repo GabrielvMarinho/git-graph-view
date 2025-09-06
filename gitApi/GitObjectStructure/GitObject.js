@@ -7,6 +7,7 @@ import { isValidBranchName } from "../utils.js";
 import NotValidBranchNameException from "../Errors/NotValidBranchNameException.js"
 import CannotDeleteBranchUsedByWorktree from "../Errors/CannotDeleteBranchUsedByWorktree.js";
 import NoBranchNamed from "../Errors/NoBranchNamed.js";
+import AlreadyUpToDate from "../Errors/AlreadyUpToDate.js";
 
 export default class GitObject{
     
@@ -290,9 +291,15 @@ export default class GitObject{
 
     createMergeCommit(message, hashTomerge){
         const currentHash = this.getCurrentHash()
+        if(currentHash==hashTomerge || this.isSpecificCommitAnAncestorOfCurrentCommit(hashTomerge)){
+            throw new AlreadyUpToDate()
+        }
         const newCommitSha = this.getRandomSha()
         const newCommit = new Commit(message, currentHash, hashTomerge)
         this.graph[newCommitSha] = newCommit
+        if(this.uiManager){
+            this.uiManager.createMergeCommit(newCommitSha, [currentHash, hashTomerge])
+        }
         this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
         return newCommitSha
     }

@@ -5,7 +5,25 @@ import GitObject from "../../GitObjectStructure/GitObject";
 //branch to hash "Merge commit 'hash' into 'currentBranch'"
 //head to hash "Merge commit 'hash' into HEAD"
 //head to branch "Merge commit 'outsideBranch' into HEAD"
+test("already up to date", ()=>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)    
+        
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    expect(
+        () =>cmdDisp.receiveAndDispatchCommand("git merge main")
+    ).toThrow("Already up to date.")
+    cmdDisp.receiveAndDispatchCommand("git branch dev")
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    cmdDisp.receiveAndDispatchCommand("git checkout dev")
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    cmdDisp.receiveAndDispatchCommand("git merge main")
 
+    expect(
+        () =>cmdDisp.receiveAndDispatchCommand("git merge main")
+    ).toThrow("Already up to date.")
+
+})
 test("normal merge in branch to branch", () =>{
     const gitObject = new GitObject()
     const cmdDisp = new CommandDispatcher(gitObject)    
