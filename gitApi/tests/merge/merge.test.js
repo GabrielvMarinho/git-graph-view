@@ -46,6 +46,28 @@ test("normal merge in branch to branch", () =>{
         String(currentCommit.parents)
     ).toBe(`${mainHash},${devHash}`)    
 })
+test("normal merge in branch to branch with message", () =>{
+    const gitObject = new GitObject()
+    const cmdDisp = new CommandDispatcher(gitObject)    
+        
+    cmdDisp.receiveAndDispatchCommand("git checkout -b 'dev'")
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    const devHash = gitObject.getCurrentHash()
+    cmdDisp.receiveAndDispatchCommand("git checkout main")
+    cmdDisp.receiveAndDispatchCommand("git commit")
+    const mainHash = gitObject.getCurrentHash()
+
+    expect(
+        cmdDisp.receiveAndDispatchCommand("git merge dev -m 'message'")    
+    ).toBe(`message`)
+    const currentCommit = gitObject.getGraph()[gitObject.getCurrentHash()]
+    expect(
+        currentCommit.message   
+    ).toBe(`message`)
+    expect(
+        String(currentCommit.parents)
+    ).toBe(`${mainHash},${devHash}`)    
+})
 
 
 test("normal merge in branch to hash", () =>{

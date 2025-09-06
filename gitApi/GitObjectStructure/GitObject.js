@@ -298,7 +298,7 @@ export default class GitObject{
         const newCommit = new Commit(message, currentHash, hashTomerge)
         this.graph[newCommitSha] = newCommit
         if(this.uiManager){
-            this.uiManager.createMergeCommit(newCommitSha, [currentHash, hashTomerge])
+            this.uiManager.createMergeCommit(newCommitSha, [currentHash, hashTomerge], message)
         }
         this.updateCurrentHashOrBranchPointerToHash(newCommitSha)
         return newCommitSha

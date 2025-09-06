@@ -22,10 +22,10 @@ export default class UiManager{
     setSetEdges(setEdges){
         this.setEdges = setEdges
     }
-    createMergeCommit(commitHash, parentsHash){ 
+    createMergeCommit(commitHash, parentsHash, message){ 
         this.createCommitIncrementCoordinates()
         this.nodes.push( 
-            {data:{id:commitHash},
+            {data:{id:commitHash, message:message},
             id:commitHash, 
             position:{ x: this.currentCommitPositionX, y: this.currentCommitPositionY }, 
             type:"mainNode"})

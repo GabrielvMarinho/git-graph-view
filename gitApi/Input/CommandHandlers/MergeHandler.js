@@ -23,12 +23,12 @@ export default class MergeHandler{
             if(this.gitObject.isBranch(hashOrBranchToMove)){
                 const returnMessage = `Merge commit '${hashToMerge.slice(0, 7)}' into HEAD`
                 this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
-                return returnMessage
+                return message?message:returnMessage
             }
             else{
                 const returnMessage = `Merge commit '${hashToMerge.slice(0, 7)}' into HEAD` 
                 this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
-                return returnMessage
+                return message?message:returnMessage
             }
         }else{
             var currentBranch = this.gitObject.getCurrentBranch()
@@ -36,12 +36,12 @@ export default class MergeHandler{
             if(this.gitObject.isBranch(hashOrBranchToMove)){
                 const returnMessage = `Merge branch '${hashOrBranchToMove}' into ${currentBranch.name}`
                 this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
-                return returnMessage
+                return message?message:returnMessage
             }
             else{
                 const returnMessage = `Merge commit '${hashToMerge.slice(0, 7)}' into ${currentBranch.name}` 
                 this.gitObject.createMergeCommit(message?message:returnMessage, hashToMerge)
-                return returnMessage
+                return message?message:returnMessage
             }
         }
     }
