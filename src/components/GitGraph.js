@@ -56,6 +56,7 @@ export default function GitGraph(){
                 edges={edges}
                 onNodesChange={onChangeNodes}
                 onEdgesChange={onChangeEdges}
+                deleteKeyCode={null}
                 >
                 <Background bgColor='#121212ff'/>
                 </ReactFlow>
