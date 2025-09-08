@@ -7,13 +7,15 @@ import GitObject from '../../gitApi/GitObjectStructure/GitObject.js';
 import CommandDispatcher from '@/gitApi/Input/CommandDispatcher.js';
 import { useEffect } from 'react';
 
-const uiManager = new UiManager();
+const xPosition = window.screen.width>900?500:(window.screen.width-(window.screen.width*0.5))/2
+const yPosition = (window.screen.height-(window.screen.height*0.5))/2
+const uiManager = new UiManager(xPosition, yPosition);
 const gitObject = new GitObject(uiManager);
 const commandDispatcher = new CommandDispatcher(gitObject)
 const initialNode = {
    "data":{id:gitObject.getCurrentHash()},
    "id":gitObject.getCurrentHash(),
-   "position":{x:500, y:300},
+   "position":{x:xPosition, y:yPosition},
    "type":"mainNode"
 }
 export default function GitGraph(){
@@ -22,6 +24,7 @@ export default function GitGraph(){
     const [edges, setEdges, onChangeEdges] = useEdgesState([]);
     
     useEffect(()=>{
+        console.log(nodes)
         const selectedNode = nodes.filter(node => {return node.selected==true})[0]
         if(selectedNode && selectedNode.dragging &&
             (selectedNode.id == uiManager.head || selectedNode.data.branches.includes(uiManager.head))){
@@ -41,6 +44,8 @@ export default function GitGraph(){
     const nodeTypes = {
     	mainNode:MainNode
     }
+    
+
     return (
         <div style={{
         width: "100vw",
@@ -57,6 +62,7 @@ export default function GitGraph(){
                 onNodesChange={onChangeNodes}
                 onEdgesChange={onChangeEdges}
                 deleteKeyCode={null}
+                proOptions={{hideAttribution: true}}
                 >
                 <Background bgColor='#121212ff'/>
                 </ReactFlow>
