@@ -57,7 +57,7 @@ Merging a commit to another commit:
 ```
 git merge "commit-hash"
 ```
-Merging a "squash" merge another branch:
+Merging a "squash" merge another branch (in thie tool a commit is created for the sake of simplicity, in real git you would have to commit yourself after the merge):
 ```
 git merge --squash "branch-name" 
 ```
